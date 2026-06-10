@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "profile": "experienced",
+  "ignore": [
+    "*.min.js",
+    "*.lock",
+    "vendor/**"
+  ],
+  "rules": {
+    "modules-small": {
+      "enabled": true,
+      "severity": "block",
+      "params": {
+        "maxLines": 200,
+        "warnAt": 160
+      },
+      "ignore": []
+    },
+    "no-tech-debt": {
+      "enabled": true,
+      "severity": "block",
+      "params": {
+        "markers": [
+          "TODO",
+          "FIXME",
+          "HACK",
+          "XXX"
+        ]
+      },
+      "ignore": []
+    },
+    "deps-hygiene": {
+      "enabled": true,
+      "severity": "block",
+      "params": {},
+      "ignore": []
+    },
+    "no-secrets": {
+      "enabled": true,
+      "severity": "block",
+      "params": {},
+      "ignore": [
+        "src/gates/no-secrets.ts",
+        "src/gates/secure-code.ts",
+        "test/**"
+      ]
+    },
+    "secure-code": {
+      "enabled": true,
+      "severity": "block",
+      "params": {},
+      "ignore": [
+        "src/gates/secure-code.ts",
+        "src/gates/no-secrets.ts",
+        "test/**"
+      ]
+    },
+    "no-dead-code": {
+      "enabled": true,
+      "severity": "warn",
+      "params": {},
+      "ignore": []
+    },
+    "error-handling": {
+      "enabled": true,
+      "severity": "block",
+      "params": {},
+      "ignore": []
+    }
+  }
+}

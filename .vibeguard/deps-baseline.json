@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "approved": {
+    "commander": {
+      "version": "14.0.0",
+      "manifest": "package.json"
+    },
+    "execa": {
+      "version": "9.6.1",
+      "manifest": "package.json"
+    },
+    "ignore": {
+      "version": "7.0.5",
+      "manifest": "package.json"
+    },
+    "picocolors": {
+      "version": "1.1.1",
+      "manifest": "package.json"
+    },
+    "zod": {
+      "version": "3.24.0",
+      "manifest": "package.json"
+    }
+  }
+}
