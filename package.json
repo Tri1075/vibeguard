@@ -33,7 +33,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepublishOnly": "npm run typecheck && npm run lint && npm run format:check && npm test"
+    "prepublishOnly": "npm run typecheck && npm run lint && npm run format:check && npm test",
+    "check": "node dist/bin.js check"
   },
   "keywords": [
     "ai-agents",
@@ -62,5 +63,14 @@
     "typescript": "^5.8.0",
     "typescript-eslint": "^8.61.0",
     "vitest": "^3.1.0"
-  }
+  },
+  "author": "Tri1075",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tri1075/vibeguard-pack.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Tri1075/vibeguard-pack/issues"
+  },
+  "homepage": "https://github.com/Tri1075/vibeguard-pack#readme"
 }

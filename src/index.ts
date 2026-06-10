@@ -8,4 +8,15 @@ export { skillMarkdown, protocolMarkdown } from './laws/skill.js';
 export { countCodeLines, classifyLines } from './core/comments.js';
 export { listProjectFiles, makeReadText } from './core/files.js';
 export { pathsFor, PROTECTED_PATTERN, VIBEGUARD_DIR } from './core/paths.js';
+export { detectHost, hostLabel, type HostId } from './core/hosts.js';
+export { emitHostArtifacts } from './adapters/hosts/emit.js';
+export {
+  estimateTokens,
+  zoneFor,
+  zoneAdvice,
+  WARN_TOKENS,
+  HANDOFF_TOKENS,
+  type ContextZone,
+} from './core/tokens.js';
+export { buildHandoffDoc, type HandoffFacts } from './core/handoff.js';
 export { TOOL_VERSION } from './version.js';

@@ -1,0 +1,39 @@
+name: 📏 Propose a rule
+description: Suggest a new engineering rule (law + gate) for the pack
+labels: [rule-proposal]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Rule name
+      placeholder: no-console-log
+    validations:
+      required: true
+  - type: textarea
+    id: law
+    attributes:
+      label: The law
+      description: The imperative text the agent should follow.
+    validations:
+      required: true
+  - type: textarea
+    id: gate
+    attributes:
+      label: The police (how would a gate check it?)
+      description: How could this be verified deterministically? What is the false-positive risk?
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Default severity
+      options: [block, warn]
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it matters
+      description: What problem in AI-written code does this prevent?
+    validations:
+      required: true

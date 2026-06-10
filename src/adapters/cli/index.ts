@@ -2,6 +2,8 @@
 import { Command } from 'commander';
 import { TOOL_VERSION } from '../../version.js';
 import { initCommand } from './init.js';
+import { runCommand } from './run.js';
+import { handoffCommand, tokensCommand } from './session.js';
 import { checkCommand, debtAddCommand, depsApproveCommand, rulesCommand } from './commands.js';
 
 export async function runCli(argv: string[]): Promise<void> {
@@ -23,6 +25,30 @@ export async function runCli(argv: string[]): Promise<void> {
     .option('--force', 'overwrite an existing setup')
     .action(async (opts: { profile?: 'beginner' | 'experienced'; force?: boolean }) => {
       await initCommand(cwd(), opts);
+    });
+
+  program
+    .command('run <cli> [args...]')
+    .description('prepare a governed session (emit rules, green-gate, headroom) then launch the agent CLI')
+    .option('--force', 'start even if gates are red')
+    .option('--no-headroom', 'do not wrap the CLI with headroom')
+    .allowUnknownOption(true)
+    .action(async (cli: string, args: string[] = [], opts: { force?: boolean; headroom?: boolean }) => {
+      await runCommand(cwd(), cli, args, opts);
+    });
+
+  program
+    .command('handoff')
+    .description('write HANDOFF.md for a clean session restart (anti dumb-zone, 120K tokens)')
+    .action(async () => {
+      await handoffCommand(cwd(), new Date().toISOString());
+    });
+
+  program
+    .command('tokens [file]')
+    .description('estimate context size and name the zone (smart / warn / handoff); reads stdin if no file')
+    .action(async (file: string | undefined) => {
+      await tokensCommand(cwd(), file);
     });
 
   program
