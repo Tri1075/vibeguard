@@ -10,14 +10,27 @@ export function detectHost(cliName: string): HostId {
   return 'generic';
 }
 
+/** Friendly names for well-known generic-host CLIs (all read AGENTS.md). */
+const KNOWN_AGENTS: Record<string, string> = {
+  codex: 'OpenAI Codex',
+  gemini: 'Gemini CLI',
+  glm: 'GLM',
+  aider: 'aider',
+  goose: 'Goose',
+  opencode: 'OpenCode',
+};
+
 /** Human label for messages. */
-export function hostLabel(host: HostId): string {
+export function hostLabel(host: HostId, cliName = ''): string {
   switch (host) {
     case 'claude-code':
       return 'Claude Code (skill + hard enforcement via driftguard hooks)';
     case 'cursor':
       return 'Cursor (.cursor/rules)';
-    default:
-      return 'generic agent (AGENTS.md)';
+    default: {
+      const base = (cliName.split('/').pop() ?? cliName).toLowerCase();
+      const known = Object.keys(KNOWN_AGENTS).find((k) => base.includes(k));
+      return known ? `${KNOWN_AGENTS[known]} (AGENTS.md)` : 'generic agent (AGENTS.md)';
+    }
   }
 }

@@ -36,7 +36,9 @@ export async function runCommand(
   const host = detectHost(cli);
 
   const written = await emitHostArtifacts(root, host);
-  process.stdout.write(`${pc.dim(`host: ${hostLabel(host)} · rules written to ${written.join(', ')}`)}\n`);
+  process.stdout.write(
+    `${pc.dim(`host: ${hostLabel(host, cli)} · rules written to ${written.join(', ')}`)}\n`,
+  );
 
   // Never start a session on red.
   const report = await runCheck(config);

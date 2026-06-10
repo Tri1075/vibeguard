@@ -1,148 +1,124 @@
 <div align="center">
 
-# 🛡️ vibeguard-pack
+# 🛡️ vibeguard
 
-### Clean code for the age of AI. The rules the best engineers follow — enforced on every LLM, on every session.
+### AI writes your code now. vibeguard makes sure it's good code.
 
 [![CI](https://github.com/Tri1075/vibeguard-pack/actions/workflows/ci.yml/badge.svg)](https://github.com/Tri1075/vibeguard-pack/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%E2%89%A520-brightgreen.svg)](package.json)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
-[![dogfooded](https://img.shields.io/badge/dogfooded-100%25-success.svg)](#dogfooding)
+[![dogfooded](https://img.shields.io/badge/dogfooded-100%25-success.svg)](#we-eat-our-own-cooking)
 
-**Stop shipping vibes. Start shipping clean code — even when an AI writes it.**
+**⭐ If you believe everyone — beginner or expert, human or AI — deserves to ship clean code, star this repo. Every star helps another vibecoder find it.**
 
 </div>
 
 ---
 
-AI agents write code fast and break things faster: 500-line god-modules, silent technical debt, dependencies parachuted in, secrets hardcoded, insecure patterns, and context windows so bloated the model gets dumb. **vibeguard-pack** governs all of it — for Claude Code, Cursor, aider, or any LLM — so the code stays clean no matter who (or what) writes it.
+## You vibecode. We've got your back.
 
-It is built on one idea: **a rule is only real if it's enforced.** So every rule ships as a pair — a **law** the agent must follow, and a **gate** that checks it deterministically (exit 0/1). Prompts ask nicely; gates don't.
+You describe what you want. An AI writes the code. That's **vibecoding** — and it's how most new code gets written today.
+
+There's just one problem: **nobody is checking the AI.**
+
+It breaks the feature that worked yesterday. It writes one giant 500-line file instead of clean small ones. It pastes your secret keys right into the code. It installs random packages you never asked for. It leaves a mess it calls "done" — and you only find out later.
+
+An AI coding assistant is like a brilliant intern with infinite energy and **zero supervision**. vibeguard is the supervision.
+
+## What it does — in plain words
+
+1. **It teaches your AI the rules** that the world's best software engineers live by. Small focused files. No secrets in code. No silent shortcuts. No security holes. Seven rules, written in plain language your AI reads before it writes anything.
+2. **It checks the work — and can't be sweet-talked.** Rules in a prompt are a polite request; the AI can ignore them. vibeguard also ships _checkers_ (we call them gates) that scan the actual code. Red is red, no matter how confident the AI sounds.
+3. **It catches destruction before you do.** With its companion engine [driftguard](https://github.com/Tri1075/driftguard), vibeguard takes a snapshot of what works _before_ the AI starts. When the AI finishes, it compares: anything that used to work and is now broken gets the AI **blocked and sent back to fix it** — then _you_ approve or reject what's left, with one click.
+
+## Works with the AI tools you already use
+
+**Claude Code · Cursor · OpenAI Codex · Gemini CLI · GLM · aider · Goose · Ollama & LM Studio (local models)** — and any other coding agent, via the universal `AGENTS.md` rules file.
 
 ```sh
 npm i -D vibeguard-pack
-npx vibeguard init       # asks your level, scaffolds .vibeguard/, links driftguard
-npx vibeguard run claude # governed session: rules in, gates green, then your agent launches
+npx vibeguard init           # answer one question: beginner or experienced?
+npx vibeguard run claude     # ...or codex, cursor, gemini, aider — your session is now governed
 ```
 
-## Why it's different
+## Never written code before?
 
-|                                                              | Prompt rules / `.cursorrules` | A linter (ESLint…) |                      **vibeguard-pack**                      |
-| ------------------------------------------------------------ | :---------------------------: | :----------------: | :----------------------------------------------------------: |
-| Works on **any** LLM / CLI                                   |          ⚠️ per-tool          |         ❌         |                              ✅                              |
-| **Enforced**, not just suggested                             |              ❌               |         ✅         |                              ✅                              |
-| Governs the **agent's behavior** (debt, deps, secrets)       |              ❌               |     ⚠️ partial     |                              ✅                              |
-| **Blocks** the agent mid-session until it self-corrects      |              ❌               |         ❌         | ✅ (via [driftguard](https://github.com/Tri1075/driftguard)) |
-| Keeps the model out of the **"dumb zone"** (context handoff) |              ❌               |         ❌         |                              ✅                              |
-| **Owner-only** limits (agent can't loosen rules)             |              ❌               |         ❌         |                              ✅                              |
+That's exactly who this is for. Here's everything you need to know:
 
-## The 7 rules
+- `vibeguard init` — run once per project. Say you're a **beginner** and you get safe settings plus plain-English explanations of every rule.
+- `vibeguard run <your AI tool>` — start your coding session through vibeguard. It hands the rules to your AI and refuses to start if the project is already broken.
+- `vibeguard check` — ask "is my code clean?" anytime. Green means yes. Red shows you exactly what's wrong, where, and **how to fix it** — in one sentence each.
 
-| #   | Rule               | What it enforces                                                                                            |
-| --- | ------------------ | ----------------------------------------------------------------------------------------------------------- |
-| 1   | **modules-small**  | Modules ≤ 200 code lines, single purpose. Split _before_ the limit — never raise it yourself.               |
-| 2   | **no-tech-debt**   | The agent warns you _before_ introducing debt; accepted debt is ledgered. Unledgered TODO/FIXME/HACK = red. |
-| 3   | **deps-hygiene**   | No new dependency without your approval.                                                                    |
-| 4   | **no-secrets**     | No hardcoded keys/tokens/passwords (pattern + entropy scan).                                                |
-| 5   | **secure-code**    | OWASP-grade: no eval, no string-built SQL/shell, no disabled TLS, safe crypto, escaped output, strict CORS. |
-| 6   | **no-dead-code**   | No commented-out code, no unused exports (heuristic graph, types exempt).                                   |
-| 7   | **error-handling** | No silent catch, no swallowed errors.                                                                       |
+You never have to read the code to know whether it's healthy. That's the point.
 
-> The 200-line limit counts **code lines only** (no comments, no blanks) — so documenting your code is always free, never penalized.
+## The 7 rules (in human words)
 
-## See it catch drift
+| #   | Rule                     | In plain words                                                                                                  |
+| --- | ------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| 1   | **Small files**          | Every file does one job, under 200 lines of code. Big files are where bugs hide.                                |
+| 2   | **No hidden shortcuts**  | If the AI wants to take a shortcut (a "hack"), it must **warn you first** and write it in a ledger you control. |
+| 3   | **No surprise packages** | The AI can't add new dependencies without your approval.                                                        |
+| 4   | **No secrets in code**   | Passwords and API keys never go in the code. Ever.                                                              |
+| 5   | **No security holes**    | The classic mistakes that get apps hacked — blocked before they ship.                                           |
+| 6   | **No dead code**         | No commented-out leftovers, no unused exports. Clean house.                                                     |
+| 7   | **No swallowed errors**  | When something fails, you hear about it — errors never vanish silently.                                         |
 
-```console
-$ vibeguard check
-vibeguard check — 5 gate(s) ran
+Every rule is yours to tune. Experienced engineers can edit any rule, raise any limit, disable anything — the AI never can. That line is enforced by the engine, not by trust.
 
-src/api/users.js
-  [CRITICAL] [no-secrets] possible hardcoded secret (AWS access key):12
-      fix: Move it to an environment variable and load it at runtime.
-  [HIGH] [secure-code] insecure pattern: SQL built by string concatenation:34
-      fix: Use parameterized queries / prepared statements, never string concatenation.
+## We eat our own cooking
 
-src/utils.js
-  [HIGH] [modules-small] 247 code lines (limit 200) — module is too big
-      fix: Split by responsibility. Never raise the limit yourself; that is an owner decision.
+vibeguard obeys its own seven rules and checks itself in CI on every commit. Its companion driftguard was our first "customer": the gates found six oversized modules and seven pieces of dead code in it — and the AI that maintains it was made to fix every one. **If we won't live by these rules, why would you?**
 
-✗ BLOCKED — 1 critical · 1 high · 1 medium
-```
+---
 
-## How it works — three pillars
+## For engineers
 
-- **[driftguard](https://github.com/Tri1075/driftguard) — enforcement.** Each gate registers as a probe. A rule going green→red mid-session becomes blocking drift: the agent is stopped at the end of its turn and must self-correct (repair → revert → justify), then **you** arbitrate (approve / reject / dismiss) in a local dashboard. `.vibeguard/**` is a protected path, so an agent can never loosen its own rules.
-- **[headroom](https://github.com/chopratejas/headroom) — token economy.** `vibeguard run` chains headroom to compress context. Less waste, lower cost.
-- **handoff — anti "dumb zone".** LLM attention degrades as the context fills (the middle of a big window is poorly read). The law tells the agent to warn at **100K tokens** and hand off at **120K**: `vibeguard handoff` writes a `HANDOFF.md`, you start a fresh session, and driftguard carries the scope across so nothing is lost.
+<details>
+<summary><b>How it actually works (click to expand)</b></summary>
 
-## Customize everything (you, not the agent)
+**Law + police, always paired.** Each rule ships as (a) an imperative rule text emitted into the host's native format — Claude Code skill, `.cursor/rules`, or a managed `AGENTS.md` block — and (b) a deterministic gate (`vibeguard check <rule>`, exit 0/1, stable `--json` output for CI).
 
-```
-.vibeguard/
-  rules.json              # enable/disable, severity (block|warn), per-rule params & ignores
-  instructions/<rule>.md  # the rule text the agent reads — edit it to your taste
-  debt.md                 # the technical-debt ledger
-  deps-baseline.json      # your approved dependency set
-```
+**Enforcement via driftguard.** `vibeguard init` registers every gate as a [driftguard](https://github.com/Tri1075/driftguard) probe and marks `.vibeguard/**` as a protected path. A gate going green→red during a session is a _regression_: the agent is blocked at end-of-turn, ordered to self-correct (repair → selective revert → justify), and the human arbitrates the remainder (approve / reject / dismiss) in a local dashboard with visual criticality.
 
-```jsonc
-// .vibeguard/rules.json — relax one limit, soften one rule
-{
-  "rules": {
-    "modules-small": { "params": { "maxLines": 250, "warnAt": 200 } },
-    "secure-code": { "severity": "warn" },
-  },
-}
-```
+**Session discipline.** LLM attention degrades as context fills (the "dumb zone"). The law mandates a warning at 100K tokens and a handoff at 120K: `vibeguard handoff` writes `HANDOFF.md`; driftguard carries scope and baseline across the fresh session. `vibeguard tokens` names your zone.
 
-`vibeguard init` is interactive: **beginner** gets safe defaults with extra "why it matters" guidance; **experienced** gets pointed straight at the files above to tailor the rules to their habits.
+**Token economy.** `vibeguard run` chains [headroom](https://github.com/chopratejas/headroom) when installed.
 
-## Commands
+**Owner-only customization.** `.vibeguard/rules.json` (enable/disable, severity `block|warn`, params, per-rule ignores) + editable `instructions/*.md` + `debt.md` ledger + `deps-baseline.json`. Inline `// vibeguard-allow` pragmas for vetted false positives.
 
-| Command                       | Who   | What                                                               |
-| ----------------------------- | ----- | ------------------------------------------------------------------ |
-| `run <cli> [args]`            | both  | prepare a governed session, then launch the agent                  |
-| `check [rule] [--json\|--ci]` | both  | run the gates — the CI / agent lock                                |
-| `handoff` · `tokens [file]`   | both  | session discipline (anti dumb-zone)                                |
-| `init [--profile]`            | human | scaffold, onboard, link driftguard                                 |
-| `rules [--skill]`             | both  | emit the law for AGENTS.md / `.cursor/rules` / a Claude Code skill |
-| `debt add` · `deps approve`   | human | record accepted debt / approve a dependency                        |
+**Gate quality bar.** False positives are treated as the existential risk: comment-aware scanning, multi-line-import-aware export graph, type exports exempt, entry points exempt, comment-only catches pass (documented intent), self-referential pattern files owner-ignored. Function-length deliberately waits for the TS compiler API rather than ship a brace-counting lie.
 
-## Use it with any agent
-
-```sh
-npx vibeguard run claude          # Claude Code (skill + hard enforcement)
-npx vibeguard run cursor          # Cursor (.cursor/rules)
-npx vibeguard run aider           # any agent (AGENTS.md)
-npx vibeguard rules >> AGENTS.md  # or just print the rules anywhere
-```
-
-## CI (GitHub Action)
+| Command                       | What                                                            |
+| ----------------------------- | --------------------------------------------------------------- |
+| `run <cli>`                   | emit host rules, refuse red start, chain headroom, launch agent |
+| `check [rule] [--json\|--ci]` | run gates; CI lock                                              |
+| `handoff` / `tokens`          | anti dumb-zone                                                  |
+| `rules [--skill]`             | emit the law anywhere                                           |
+| `debt add` / `deps approve`   | human-only ledgers                                              |
 
 ```yaml
-- uses: actions/checkout@v4
+# GitHub Action
 - uses: Tri1075/vibeguard-pack@main
-  with:
-    command: check --ci
+  with: { command: check --ci }
 ```
 
-## Dogfooding
-
-vibeguard-pack obeys its own 7 rules and runs `vibeguard check` in CI. Every module is small and single-purpose (largest: ~110 lines). If we won't follow the rules, why should you?
+</details>
 
 ## Contributing
 
-This wants to become the reference for clean AI-assisted coding — and that takes a community. **New rules, new language support, better gates: all welcome.** Adding a rule is intentionally easy (see [CONTRIBUTING.md](CONTRIBUTING.md)). Good first issues are labeled.
+vibeguard wants to become **the world's reference for clean AI-assisted code** — and that takes a community. New rules, new language support, sharper gates: all welcome, and adding a rule is deliberately a two-small-files job ([CONTRIBUTING.md](CONTRIBUTING.md)).
 
-⭐ **If you believe AI-written code should be clean, star the repo** — it helps others find it.
+<div align="center">
+
+**⭐ One more time, because it matters: if you think the world should produce better code — written by anyone, reviewed by no one's vibes — star the repo and pass it on.**
+
+</div>
 
 ## Roadmap
 
-- ✅ **M1** — core engine, 5 gates, 7 laws, CLI, driftguard integration
-- ✅ **M2** — `run` wrapper, host adapters (Claude Code / Cursor / AGENTS.md), 120K handoff
-- ✅ **M3** — no-dead-code & error-handling gates (TS/JS + Python `except: pass`), reusable GitHub Action
-- ⏳ **Next** — true AST gates (function length, floating promises) via the TypeScript compiler, more languages, VS Code surface
+- ✅ The 7 rules, law + police · session wrapper · 120K handoff · driftguard enforcement · GitHub Action
+- ⏳ True AST gates (function length, floating promises) · more languages · VS Code surface · public launch
 
 ## License
 
