@@ -1,0 +1,25 @@
+name: 'vibeguard'
+description: 'Run the vibeguard gates (clean-code rules for AI-written code) and fail the job on blocking findings.'
+branding:
+  icon: 'shield'
+  color: 'purple'
+inputs:
+  command:
+    description: 'vibeguard arguments (e.g. "check --ci" or "check secure-code --ci")'
+    required: false
+    default: 'check --ci'
+  version:
+    description: 'vibeguard-pack npm version to run'
+    required: false
+    default: 'latest'
+  working-directory:
+    description: 'project directory'
+    required: false
+    default: '.'
+runs:
+  using: 'composite'
+  steps:
+    - name: Run vibeguard
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: npx -y vibeguard-pack@${{ inputs.version }} ${{ inputs.command }}

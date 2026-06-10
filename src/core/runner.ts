@@ -41,8 +41,12 @@ export async function runCheck(config: LoadedConfig, opts: RunOptions = {}): Pro
     ran.push(gate.id);
 
     // A rule set to `warn` downgrades its findings to info and never blocks.
+    // Even on a `block` rule, low/info findings (e.g. "approaching the limit")
+    // advise — only medium+ findings actually block.
     const adjusted = rule.severity === 'warn' ? raw.map((f) => ({ ...f, severity: 'info' as const })) : raw;
-    if (rule.severity === 'block' && raw.length > 0) blocked = true;
+    const blocking =
+      rule.severity === 'block' && raw.some((f) => f.severity !== 'low' && f.severity !== 'info');
+    if (blocking) blocked = true;
     findings.push(...adjusted);
   }
 

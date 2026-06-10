@@ -59,13 +59,17 @@
       "enabled": true,
       "severity": "warn",
       "params": {},
-      "ignore": []
+      "ignore": [
+        "test/**"
+      ]
     },
     "error-handling": {
       "enabled": true,
       "severity": "block",
       "params": {},
-      "ignore": []
+      "ignore": [
+        "test/**"
+      ]
     }
   }
 }

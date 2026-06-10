@@ -46,7 +46,7 @@ npx vibeguard run claude # governed session: rules in, gates green, then your ag
 | 3   | **deps-hygiene**   | No new dependency without your approval.                                                                    |
 | 4   | **no-secrets**     | No hardcoded keys/tokens/passwords (pattern + entropy scan).                                                |
 | 5   | **secure-code**    | OWASP-grade: no eval, no string-built SQL/shell, no disabled TLS, safe crypto, escaped output, strict CORS. |
-| 6   | **no-dead-code**   | No commented-out code, no dead exports.                                                                     |
+| 6   | **no-dead-code**   | No commented-out code, no unused exports (heuristic graph, types exempt).                                   |
 | 7   | **error-handling** | No silent catch, no swallowed errors.                                                                       |
 
 > The 200-line limit counts **code lines only** (no comments, no blanks) — so documenting your code is always free, never penalized.
@@ -118,6 +118,15 @@ npx vibeguard run aider           # any agent (AGENTS.md)
 npx vibeguard rules >> AGENTS.md  # or just print the rules anywhere
 ```
 
+## CI (GitHub Action)
+
+```yaml
+- uses: actions/checkout@v4
+- uses: Tri1075/vibeguard-pack@main
+  with:
+    command: check --ci
+```
+
 ## Dogfooding
 
 vibeguard-pack obeys its own 7 rules and runs `vibeguard check` in CI. Every module is small and single-purpose (largest: ~110 lines). If we won't follow the rules, why should you?
@@ -132,7 +141,8 @@ This wants to become the reference for clean AI-assisted coding — and that tak
 
 - ✅ **M1** — core engine, 5 gates, 7 laws, CLI, driftguard integration
 - ✅ **M2** — `run` wrapper, host adapters (Claude Code / Cursor / AGENTS.md), 120K handoff
-- ⏳ **M3** — AST gates (no-dead-code, error-handling), Python support, GitHub Action, VS Code surface
+- ✅ **M3** — no-dead-code & error-handling gates (TS/JS + Python `except: pass`), reusable GitHub Action
+- ⏳ **Next** — true AST gates (function length, floating promises) via the TypeScript compiler, more languages, VS Code surface
 
 ## License
 

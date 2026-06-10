@@ -8,6 +8,13 @@ All notable changes to vibeguard-pack are documented here. The format follows
 
 ### Added
 
+- **M3 — every rule now has its police.** `no-dead-code` gate (commented-out
+  code heuristic + unused-export graph for TS/JS — multi-line-import aware,
+  type exports exempt by default) and `error-handling` gate (empty `catch`
+  blocks incl. multi-line, empty promise `.catch`, Python `except: pass`).
+  Reusable GitHub Action (`action.yml`). Low/info findings no longer block a
+  `block`-severity rule (they advise; medium+ blocks).
+
 - **M2 — session wrapper & handoff.** `vibeguard run <cli>` prepares a governed
   session (emits host rules, refuses to start on red, chains headroom) then
   launches the agent. Host adapters for Claude Code (skill), Cursor

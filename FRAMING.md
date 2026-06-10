@@ -90,7 +90,7 @@ HANDOFF.md                    # written at 120K, re-injected next session
 
 - **M1 — Core (this milestone)**: `init` (interactive level onboarding + profiles) + `rules.json`/instructions + the 5 non-AST gates (modules, debt, secrets, secure-code, deps) + `check [--json]` + debt/deps human commands + driftguard registration (probe + protected path) + laws for all 7 rules + Claude Code skill emission + fixtures/tests + English docs.
 - **M2 — Wrapper & hosts**: `run <cli>` (host detection, artifacts, headroom chaining, green-gates-at-start) + Cursor/AGENTS.md adapters + handoff implementation (transcript counter on Claude Code, `HANDOFF.md` lifecycle).
-- **M3 — AST gates & polish**: no-dead-code, error-handling, function-length (TS) + GitHub Action + beginner/expert documentation tracks + dogfooding driftguard splits + public release.
+- **M3 — gates completed**: no-dead-code + error-handling (heuristic, FP-safe) + GitHub Action + dogfooding driftguard splits. Function-length was deliberately deferred: counting braces across template literals without a real parser produces false positives, which violates the precision principle — it lands with the TypeScript-AST milestone.
 
 ## 8. Risks
 

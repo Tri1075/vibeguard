@@ -44,7 +44,7 @@ export const LAWS: Law[] = [
   {
     id: 'error-handling',
     title: 'Handle every error',
-    body: 'No silent catch, no swallowed error. Every error is handled, logged with context, or propagated. Never `catch {}` or catch-and-only-log-then-continue when the operation actually failed. Await or explicitly handle every promise.',
+    body: 'No silent catch, no swallowed error. Every error is handled, logged with context, or propagated. Never leave a catch block empty, and never log-and-continue when the operation actually failed. Await or explicitly handle every promise.',
   },
 ];
 

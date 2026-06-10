@@ -2,7 +2,7 @@
 import { z } from 'zod';
 
 /** One rule entry: toggle, severity, free-form params, scoped ignores. */
-export const RuleEntrySchema = z.object({
+const RuleEntrySchema = z.object({
   enabled: z.boolean().default(true),
   severity: z.enum(['block', 'warn']).default('block'),
   params: z.record(z.unknown()).default({}),
