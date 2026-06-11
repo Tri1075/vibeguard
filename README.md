@@ -27,7 +27,11 @@ An AI coding agent is a brilliant intern with infinite energy and **zero supervi
 
 That last column is the part nobody else does: the guard doesn't just catch drift, **it closes the loop** so the same drift stops happening.
 
-**▶ [See the whole loop in ~60 seconds](demo/)** — on a throwaway project: one command governs it, the agent drifts, the guard blocks it with a plain-English verdict, the agent self-corrects, and the recurring mistake becomes a standing rule. Nothing faked.
+### See the whole loop — nothing faked
+
+![vibeguard + driftguard: govern → drift → block → self-correct → learn](demo/loop.gif)
+
+One command governs a throwaway project; the agent edits in scope and also drifts; the guard blocks the drift with a plain-English verdict; the agent self-corrects; and the recurring mistake becomes a standing rule. ([how it's recorded, anonymized](demo/))
 
 ## Why it's different
 

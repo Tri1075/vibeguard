@@ -12,9 +12,10 @@ Set Height 860
 Set Padding 18
 Set PlaybackSpeed 1.0
 
-# Force a PII-free prompt before anything is shown.
+# Force a PII-free prompt before anything is shown. unset PROMPT_COMMAND so a
+# user .bashrc can't re-inject `user@host` on each prompt.
 Hide
-Type "export PS1='$ ' && clear" Enter
+Type "unset PROMPT_COMMAND; export PS1='$ '; clear" Enter
 Show
 
 Sleep 500ms
