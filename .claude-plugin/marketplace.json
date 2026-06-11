@@ -1,0 +1,16 @@
+{
+  "name": "vibeguard",
+  "owner": {
+    "name": "Tri1075"
+  },
+  "description": "Clean AI-assisted code: the 9 vibeguard rules and the workflow skills, installable in one command.",
+  "plugins": [
+    {
+      "name": "vibeguard",
+      "source": "./",
+      "description": "9 engineering rules every AI coding agent must follow, plus the workflow toolbox (grill me, write a PRD, to issues, TDD, diagnose, caveman).",
+      "category": "productivity",
+      "tags": ["code-quality", "rules", "vibecoding", "guardrails"]
+    }
+  ]
+}

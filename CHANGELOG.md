@@ -8,6 +8,18 @@ All notable changes to vibeguard-pack are documented here. The format follows
 
 ### Added
 
+- **M5 — distribution & self-governance.** License switched to **MIT**.
+  **Claude Code plugin marketplace**: the repo is now a plugin + marketplace
+  (`/plugin marketplace add Tri1075/vibeguard-pack`); static `skills/` are
+  generated from the TypeScript source (`npm run emit:plugin`) and CI fails on
+  any drift between the two. **"No excuses" block** in the emitted law: the
+  agent's favorite rationalizations, pre-refuted (token budget 1100 → 1300,
+  owner decision). README rewritten ~40% shorter with the PLAN → BUILD →
+  VERIFY → LEARN lifecycle and the engineers section un-collapsed.
+  `docs/agent-skills.md`: using vibeguard as the enforcement layer under
+  Addy Osmani's agent-skills (or any skills collection). vibeguard now
+  **develops under its own governance** (driftguard probes, declared scopes,
+  arbitrated drift).
 - **M4 — plan, stack, and token economy.** Two new rules (9 total):
   `plan-first` (a project starts with a robust action plan — the gate checks
   PLAN.md exists and has substance; advisory by default so a missing plan never

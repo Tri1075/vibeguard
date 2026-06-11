@@ -1,0 +1,109 @@
+{
+  "ignore": [
+    "coverage/",
+    "dist/",
+    "build/",
+    ".cache/",
+    "*.log"
+  ],
+  "limits": {
+    "maxFileSizeBytes": 5000000,
+    "maxFiles": 20000,
+    "maxProbeOutputBytes": 262144
+  },
+  "llm": {
+    "provider": "none"
+  },
+  "policy": {
+    "mode": "review"
+  },
+  "probes": [
+    {
+      "cmd": "npm test",
+      "name": "test",
+      "timeoutMs": 180000,
+      "unstable": false
+    },
+    {
+      "cmd": "npm run build",
+      "name": "build",
+      "timeoutMs": 180000,
+      "unstable": true
+    },
+    {
+      "cmd": "npm run lint",
+      "name": "lint",
+      "timeoutMs": 90000,
+      "unstable": false
+    },
+    {
+      "cmd": "npm run typecheck",
+      "name": "typecheck",
+      "timeoutMs": 90000,
+      "unstable": false
+    },
+    {
+      "name": "vibeguard-plan-first",
+      "cmd": "npx vibeguard check plan-first --ci",
+      "timeoutMs": 60000,
+      "unstable": false
+    },
+    {
+      "name": "vibeguard-robust-stack",
+      "cmd": "npx vibeguard check robust-stack --ci",
+      "timeoutMs": 60000,
+      "unstable": false
+    },
+    {
+      "name": "vibeguard-modules-small",
+      "cmd": "npx vibeguard check modules-small --ci",
+      "timeoutMs": 60000,
+      "unstable": false
+    },
+    {
+      "name": "vibeguard-no-tech-debt",
+      "cmd": "npx vibeguard check no-tech-debt --ci",
+      "timeoutMs": 60000,
+      "unstable": false
+    },
+    {
+      "name": "vibeguard-deps-hygiene",
+      "cmd": "npx vibeguard check deps-hygiene --ci",
+      "timeoutMs": 60000,
+      "unstable": false
+    },
+    {
+      "name": "vibeguard-no-secrets",
+      "cmd": "npx vibeguard check no-secrets --ci",
+      "timeoutMs": 60000,
+      "unstable": false
+    },
+    {
+      "name": "vibeguard-secure-code",
+      "cmd": "npx vibeguard check secure-code --ci",
+      "timeoutMs": 60000,
+      "unstable": false
+    },
+    {
+      "name": "vibeguard-no-dead-code",
+      "cmd": "npx vibeguard check no-dead-code --ci",
+      "timeoutMs": 60000,
+      "unstable": false
+    },
+    {
+      "name": "vibeguard-error-handling",
+      "cmd": "npx vibeguard check error-handling --ci",
+      "timeoutMs": 60000,
+      "unstable": false
+    }
+  ],
+  "protect": [
+    ".vibeguard/**"
+  ],
+  "respectGitignore": true,
+  "root": ".",
+  "schemaVersion": 1,
+  "scrub": [],
+  "scrubBuiltins": true,
+  "track": []
+}

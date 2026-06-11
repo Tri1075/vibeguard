@@ -2,7 +2,7 @@
   "name": "vibeguard-pack",
   "version": "0.1.0",
   "description": "The essential foundation for vibecoders: 9 engineering rules every LLM must follow (law) and deterministic gates that enforce them (police). Pairs with driftguard and headroom.",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "type": "module",
   "engines": {
     "node": ">=20"
@@ -34,7 +34,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepublishOnly": "npm run typecheck && npm run lint && npm run format:check && npm test",
-    "check": "node dist/bin.js check"
+    "check": "node dist/bin.js check",
+    "emit:plugin": "npm run build && node scripts/emit-plugin.mjs"
   },
   "keywords": [
     "ai-agents",

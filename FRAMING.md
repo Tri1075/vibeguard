@@ -11,18 +11,18 @@ LLMs code fast and drift fast: bloated modules, silent technical debt, parachute
 
 ## 2. Frozen decisions
 
-| Decision         | Choice                                                                                                                          |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Name             | **vibeguard-pack** (binary: `vibeguard`)                                                                                        |
-| Session start    | **wrapper `vibeguard run <cli>`** — prepares everything, then launches the agent                                                |
-| Rule set         | **the 9 rules** (see §4) — 7 in the MVP, plan-first & robust-stack added in M4                                                  |
-| 200-line measure | **code lines only** (non-blank, non-comment — ESLint `max-lines` convention), owner-configurable                                |
-| Context limit    | **handoff mandatory at 120K tokens**, warning at 100K — owner-configurable                                                      |
-| Publication      | GitHub private → public when proven; npm; Apache-2.0                                                                            |
-| Customization    | per-rule editable markdown instructions + `rules.json`; experience-level onboarding; user-level defaults                        |
-| Owner boundary   | `.vibeguard/**` is a driftguard-protected path — "never raise the limit yourself: owner decision" is guaranteed by construction |
-| Language         | the entire repository (code, comments, docs, rule texts) is **English**                                                         |
-| Privacy          | no personal names, emails, or absolute local paths anywhere in the repo or its git history (public-bound)                       |
+| Decision         | Choice                                                                                                                                                                                                                        |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Name             | **vibeguard-pack** (binary: `vibeguard`)                                                                                                                                                                                      |
+| Session start    | **wrapper `vibeguard run <cli>`** — prepares everything, then launches the agent                                                                                                                                              |
+| Rule set         | **the 9 rules** (see §4) — 7 in the MVP, plan-first & robust-stack added in M4                                                                                                                                                |
+| 200-line measure | **code lines only** (non-blank, non-comment — ESLint `max-lines` convention), owner-configurable                                                                                                                              |
+| Context limit    | **handoff mandatory at 120K tokens**, warning at 100K — owner-configurable                                                                                                                                                    |
+| Publication      | GitHub private → public when proven; npm; **MIT** (switched from Apache-2.0 in M5); Claude Code plugin marketplace (`/plugin marketplace add Tri1075/vibeguard-pack`, static `skills/` kept in sync with the TS source by CI) |
+| Customization    | per-rule editable markdown instructions + `rules.json`; experience-level onboarding; user-level defaults                                                                                                                      |
+| Owner boundary   | `.vibeguard/**` is a driftguard-protected path — "never raise the limit yourself: owner decision" is guaranteed by construction                                                                                               |
+| Language         | the entire repository (code, comments, docs, rule texts) is **English**                                                                                                                                                       |
+| Privacy          | no personal names, emails, or absolute local paths anywhere in the repo or its git history (public-bound)                                                                                                                     |
 
 ## 3. The three transversal pillars
 

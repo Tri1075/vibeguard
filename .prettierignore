@@ -4,3 +4,5 @@ coverage/
 *.tgz
 .vibeguard/
 .driftguard/
+skills/
+.claude/

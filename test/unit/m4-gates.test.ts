@@ -102,11 +102,12 @@ describe('robust-stack', () => {
 describe('token economy: emitted artifacts stay within budget', () => {
   // These budgets are a contract: agents pay for every emitted token at each
   // session start. Raising a budget is an owner decision, not a side effect.
-  it('rules skill ≤ 1100 tokens', () => {
-    expect(estimateTokens(skillMarkdown())).toBeLessThanOrEqual(1100);
+  // (1100 → 1300 approved by the owner for the M5 "No excuses" block.)
+  it('rules skill ≤ 1300 tokens', () => {
+    expect(estimateTokens(skillMarkdown())).toBeLessThanOrEqual(1300);
   });
-  it('host-agnostic protocol ≤ 1100 tokens', () => {
-    expect(estimateTokens(protocolMarkdown())).toBeLessThanOrEqual(1100);
+  it('host-agnostic protocol ≤ 1300 tokens', () => {
+    expect(estimateTokens(protocolMarkdown())).toBeLessThanOrEqual(1300);
   });
   it.each(EXTRA_SKILLS.map((s) => [s.name, s] as const))('%s stays within its budget', (_name, s) => {
     expect(estimateTokens(s.markdown())).toBeLessThanOrEqual(s.budgetTokens);

@@ -18,6 +18,21 @@ const PREAMBLE = [
   '## The rules',
 ].join('\n');
 
+const NO_EXCUSES = [
+  '',
+  '## No excuses',
+  'Common rationalizations — all invalid:',
+  '- "No time to plan, the task is clear" → if it were clear, the plan would take two minutes. Write it.',
+  '- "This popular new framework will be fine" → robust means proven. Record why, or pick boring.',
+  '- "This file is cohesive, the limit doesn\'t apply" → split by responsibility; the limit is the owner\'s, not yours.',
+  '- "It\'s just a quick hack for now" → that is debt. Warn the user first, ledger it, or don\'t do it.',
+  '- "Everyone uses this package" → popularity is not approval. Ask first.',
+  '- "It\'s only a test key" → test keys leak too. No secret in code, ever.',
+  '- "Input validation can come later" → later never comes. Secure now or warn now.',
+  '- "I\'ll keep the old code commented out just in case" → git remembers. Delete it.',
+  '- "This catch can stay empty, failure is unlikely" → unlikely failures are the ones that hurt. Handle or propagate.',
+].join('\n');
+
 const CLOSING = [
   '',
   '## Enforcement',
@@ -42,6 +57,7 @@ export function skillMarkdown(): string {
     PREAMBLE,
     '',
     rulesBlock(),
+    NO_EXCUSES,
     CLOSING,
     '',
   ].join('\n');
@@ -49,7 +65,14 @@ export function skillMarkdown(): string {
 
 /** Host-agnostic protocol (for .cursor/rules, AGENTS.md, any system prompt). */
 export function protocolMarkdown(): string {
-  return ['# vibeguard — engineering rules (mandatory)', '', PREAMBLE, '', rulesBlock(), CLOSING, ''].join(
-    '\n',
-  );
+  return [
+    '# vibeguard — engineering rules (mandatory)',
+    '',
+    PREAMBLE,
+    '',
+    rulesBlock(),
+    NO_EXCUSES,
+    CLOSING,
+    '',
+  ].join('\n');
 }
