@@ -6,6 +6,22 @@ All notable changes to vibeguard-pack are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- **M11 — zero-friction plugin (foundation).** Toward "one install governs
+  every project": a `vibeguard bootstrap` command does the whole idempotent
+  setup in one shot (rules + driftguard config + gate probes + baseline), so a
+  Claude Code SessionStart hook can frame a project with the user doing nothing
+  but describe and decide. The CLI entrypoints (`src/bin.ts`) became
+  ncc-bundlable (async IIFE), `scripts/bundle-plugin.mjs` compiles both vibeguard
+  and driftguard to single self-contained binaries (no `node_modules`, no npx),
+  and `hooks/hooks.json` wires the four lifecycle hooks to those bundled
+  binaries via `${CLAUDE_PLUGIN_ROOT}` — so attribution and tamper-blocking are
+  on by default, never disabled. The end-to-end plugin smoke caught a real
+  driftguard bug (integrity key not canonicalized → false "tamper" across
+  symlinked paths like macOS /var), now fixed. Bundles are gitignored during
+  development; committing them is the release step.
+
 ### Changed
 
 - **M10 — grill-with-docs & marketing.** The `plan-interview` skill ("grill

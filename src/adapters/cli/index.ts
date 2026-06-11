@@ -3,6 +3,7 @@ import { Command } from 'commander';
 import { TOOL_VERSION } from '../../version.js';
 import { initCommand } from './init.js';
 import { runCommand } from './run.js';
+import { bootstrapCommand } from './bootstrap.js';
 import { handoffCommand, tokensCommand } from './session.js';
 import { checkCommand, debtAddCommand, depsApproveCommand, rulesCommand } from './commands.js';
 
@@ -25,6 +26,18 @@ export async function runCli(argv: string[]): Promise<void> {
     .option('--force', 'overwrite an existing setup')
     .action(async (opts: { profile?: 'beginner' | 'experienced'; force?: boolean }) => {
       await initCommand(cwd(), opts);
+    });
+
+  program
+    .command('bootstrap')
+    .description(
+      'idempotent one-shot setup: rules + driftguard config + probes + baseline (used by the plugin)',
+    )
+    .option('--driftguard-bin <path>', 'path to a bundled driftguard binary (else PATH)')
+    .option('--vibeguard-bin <path>', 'path to a bundled vibeguard binary for the probe command')
+    .option('--quiet', 'suppress the human-facing line')
+    .action(async (opts: { driftguardBin?: string; vibeguardBin?: string; quiet?: boolean }) => {
+      await bootstrapCommand(cwd(), opts);
     });
 
   program

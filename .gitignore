@@ -5,3 +5,6 @@ coverage/
 .driftguard/snapshots/
 .driftguard/state/
 .driftguard/backups/
+
+# generated plugin binaries (built by scripts/bundle-plugin.mjs; committed at release)
+plugin-bin/

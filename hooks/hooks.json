@@ -1,0 +1,53 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/plugin-bin/vibeguard/index.js\" bootstrap --driftguard-bin \"${CLAUDE_PLUGIN_ROOT}/plugin-bin/driftguard/index.js\" --vibeguard-bin \"${CLAUDE_PLUGIN_ROOT}/plugin-bin/vibeguard/index.js\" --quiet"
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/plugin-bin/driftguard/index.js\" hook session-start"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/plugin-bin/driftguard/index.js\" hook post-tool-use",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/plugin-bin/driftguard/index.js\" hook user-prompt-submit",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/plugin-bin/driftguard/index.js\" hook stop",
+            "timeout": 120
+          }
+        ]
+      }
+    ]
+  }
+}
