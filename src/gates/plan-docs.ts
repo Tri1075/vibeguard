@@ -5,13 +5,7 @@
 import type { GateContext } from '../core/types.js';
 
 /** Files accepted as the project's action plan, in preference order. */
-export const DEFAULT_PLAN_FILES = [
-  'PLAN.md',
-  'docs/PLAN.md',
-  'PLANNING.md',
-  'FRAMING.md',
-  'ROADMAP.md',
-];
+export const DEFAULT_PLAN_FILES = ['PLAN.md', 'docs/PLAN.md', 'PLANNING.md', 'FRAMING.md', 'ROADMAP.md'];
 
 /** Heading that marks a stack decision record inside a plan document. */
 export const STACK_HEADING = /^#{1,3}\s+.*\bstack\b/im;

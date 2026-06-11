@@ -54,30 +54,30 @@ You never have to read the code to know whether it's healthy. That's the point.
 
 ## The 9 rules (in human words)
 
-| #   | Rule                     | In plain words                                                                                                  |
-| --- | ------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| #   | Rule                     | In plain words                                                                                                          |
+| --- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
 | 1   | **Plan first**           | A real project starts with a robust plan — goal, milestones, risks — not with the first file the AI feels like writing. |
-| 2   | **Robust stack**         | The AI researches the most solid technology for the job and writes down why. Boring and proven beats shiny and new. |
-| 3   | **Small files**          | Every file does one job, under 200 lines of code. Big files are where bugs hide.                                |
-| 4   | **No hidden shortcuts**  | If the AI wants to take a shortcut (a "hack"), it must **warn you first** and write it in a ledger you control. |
-| 5   | **No surprise packages** | The AI can't add new dependencies without your approval.                                                        |
-| 6   | **No secrets in code**   | Passwords and API keys never go in the code. Ever.                                                              |
-| 7   | **No security holes**    | The classic mistakes that get apps hacked — blocked before they ship.                                           |
-| 8   | **No dead code**         | No commented-out leftovers, no unused exports. Clean house.                                                     |
-| 9   | **No swallowed errors**  | When something fails, you hear about it — errors never vanish silently.                                         |
+| 2   | **Robust stack**         | The AI researches the most solid technology for the job and writes down why. Boring and proven beats shiny and new.     |
+| 3   | **Small files**          | Every file does one job, under 200 lines of code. Big files are where bugs hide.                                        |
+| 4   | **No hidden shortcuts**  | If the AI wants to take a shortcut (a "hack"), it must **warn you first** and write it in a ledger you control.         |
+| 5   | **No surprise packages** | The AI can't add new dependencies without your approval.                                                                |
+| 6   | **No secrets in code**   | Passwords and API keys never go in the code. Ever.                                                                      |
+| 7   | **No security holes**    | The classic mistakes that get apps hacked — blocked before they ship.                                                   |
+| 8   | **No dead code**         | No commented-out leftovers, no unused exports. Clean house.                                                             |
+| 9   | **No swallowed errors**  | When something fails, you hear about it — errors never vanish silently.                                                 |
 
 ## The companion skills (Claude Code)
 
 Beyond the rules, `vibeguard run claude` installs a small toolbox of workflow skills — a full pipeline from idea to shipped code:
 
-| Skill              | Say…              | What it does                                                                                          |
-| ------------------ | ----------------- | ------------------------------------------------------------------------------------------------------ |
-| **plan-interview** | "grill me"        | Interviews you about every branch of your plan, one question at a time, until you truly agree.        |
-| **write-a-prd**    | "write a PRD"     | Problem story → codebase verification → design grilling → module sketch → PRD filed as a GitHub issue. |
-| **to-issues**      | "to issues"       | Slices the plan/PRD into independent, vertically-sliced GitHub issues anyone can grab.                |
-| **tdd**            | "build this TDD"  | Red-green-refactor, one vertical slice at a time. Weakening a test counts as drift.                   |
-| **diagnose**       | "diagnose this"   | Disciplined bug loop: reproduce, minimize, hypothesize, instrument, fix, regression-test.             |
-| **caveman**        | "caveman mode"    | Ultra-terse replies to stretch your context window — warnings never compressed away.                  |
+| Skill              | Say…             | What it does                                                                                           |
+| ------------------ | ---------------- | ------------------------------------------------------------------------------------------------------ |
+| **plan-interview** | "grill me"       | Interviews you about every branch of your plan, one question at a time, until you truly agree.         |
+| **write-a-prd**    | "write a PRD"    | Problem story → codebase verification → design grilling → module sketch → PRD filed as a GitHub issue. |
+| **to-issues**      | "to issues"      | Slices the plan/PRD into independent, vertically-sliced GitHub issues anyone can grab.                 |
+| **tdd**            | "build this TDD" | Red-green-refactor, one vertical slice at a time. Weakening a test counts as drift.                    |
+| **diagnose**       | "diagnose this"  | Disciplined bug loop: reproduce, minimize, hypothesize, instrument, fix, regression-test.              |
+| **caveman**        | "caveman mode"   | Ultra-terse replies to stretch your context window — warnings never compressed away.                   |
 
 Several of these are inspired by [Matt Pocock's skills](https://github.com/mattpocock/skills) (MIT) — credit where credit is due. Ours are rewritten in vibeguard's voice, wired to driftguard enforcement, and shipped under locked token budgets.
 
