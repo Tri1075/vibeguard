@@ -19,6 +19,13 @@ All notable changes to vibeguard-pack are documented here. The format follows
   New **write-a-prd skill**: problem description → codebase verification →
   relentless interview → deep-module design (user-validated, tests chosen by
   the user) → PRD filed as a GitHub issue from a fixed template.
+  **Companion skill toolbox** completing the pipeline: `to-issues` (PRD →
+  vertically-sliced independent GitHub issues), `tdd` (red-green-refactor per
+  vertical slice, driftguard catches weakened tests), `diagnose` (reproduce →
+  minimize → hypothesize → instrument → fix → regression-test) and `caveman`
+  (ultra-terse reply mode; debt/security/drift warnings never compressed).
+  Several skills are inspired by Matt Pocock's public skills collection
+  (github.com/mattpocock/skills, MIT) — credit where credit is due.
   **Locked token budgets**: every agent-facing artifact (rules skill, protocol
   block, interview skill, handoff template) now has a maximum token cost
   asserted in the test suite — raising a budget is an owner decision.

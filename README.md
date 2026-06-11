@@ -66,9 +66,20 @@ You never have to read the code to know whether it's healthy. That's the point.
 | 8   | **No dead code**         | No commented-out leftovers, no unused exports. Clean house.                                                     |
 | 9   | **No swallowed errors**  | When something fails, you hear about it — errors never vanish silently.                                         |
 
-**Bonus — "grill me".** Got a plan but not sure it holds? Say *"grill me"* and your AI interviews you about every branch of it, one question at a time, until you both actually agree on what you're building.
+## The companion skills (Claude Code)
 
-**Bonus — "write a PRD".** Going from idea to feature? Your AI gathers your problem story, verifies it against the codebase, grills you on the design, sketches the modules with you — then files the whole thing as a clean GitHub issue. (Both ship as extra skills on Claude Code.)
+Beyond the rules, `vibeguard run claude` installs a small toolbox of workflow skills — a full pipeline from idea to shipped code:
+
+| Skill              | Say…              | What it does                                                                                          |
+| ------------------ | ----------------- | ------------------------------------------------------------------------------------------------------ |
+| **plan-interview** | "grill me"        | Interviews you about every branch of your plan, one question at a time, until you truly agree.        |
+| **write-a-prd**    | "write a PRD"     | Problem story → codebase verification → design grilling → module sketch → PRD filed as a GitHub issue. |
+| **to-issues**      | "to issues"       | Slices the plan/PRD into independent, vertically-sliced GitHub issues anyone can grab.                |
+| **tdd**            | "build this TDD"  | Red-green-refactor, one vertical slice at a time. Weakening a test counts as drift.                   |
+| **diagnose**       | "diagnose this"   | Disciplined bug loop: reproduce, minimize, hypothesize, instrument, fix, regression-test.             |
+| **caveman**        | "caveman mode"    | Ultra-terse replies to stretch your context window — warnings never compressed away.                  |
+
+Several of these are inspired by [Matt Pocock's skills](https://github.com/mattpocock/skills) (MIT) — credit where credit is due. Ours are rewritten in vibeguard's voice, wired to driftguard enforcement, and shipped under locked token budgets.
 
 Every rule is yours to tune. Experienced engineers can edit any rule, raise any limit, disable anything — the AI never can. That line is enforced by the engine, not by trust.
 

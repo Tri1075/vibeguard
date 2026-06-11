@@ -3,6 +3,7 @@
  * interview, codebase exploration and module design, then file it as a GitHub
  * issue. Completes the planning trio: plan-first (law), plan-interview
  * (stress-test), write-a-prd (formalize).
+ * Inspired by Matt Pocock's `to-prd` (github.com/mattpocock/skills, MIT).
  */
 
 export function prdSkillMarkdown(): string {

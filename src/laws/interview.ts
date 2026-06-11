@@ -2,6 +2,7 @@
  * The plan-interview skill ("grill me") — companion to the plan-first law.
  * A plan is only robust once every branch of its decision tree has been
  * walked and resolved; this skill makes the agent do exactly that.
+ * Inspired by Matt Pocock's `grill-me` (github.com/mattpocock/skills, MIT).
  */
 
 export function interviewSkillMarkdown(): string {
