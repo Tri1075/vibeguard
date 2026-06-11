@@ -3,6 +3,7 @@ import { planFirst } from '../../src/gates/plan-first.js';
 import { robustStack } from '../../src/gates/robust-stack.js';
 import { skillMarkdown, protocolMarkdown } from '../../src/laws/skill.js';
 import { interviewSkillMarkdown } from '../../src/laws/interview.js';
+import { prdSkillMarkdown } from '../../src/laws/prd.js';
 import { buildHandoffDoc } from '../../src/core/handoff.js';
 import { estimateTokens } from '../../src/core/tokens.js';
 import type { GateContext, ResolvedRule } from '../../src/core/types.js';
@@ -110,6 +111,9 @@ describe('token economy: emitted artifacts stay within budget', () => {
   });
   it('plan-interview skill ≤ 250 tokens', () => {
     expect(estimateTokens(interviewSkillMarkdown())).toBeLessThanOrEqual(250);
+  });
+  it('write-a-prd skill ≤ 600 tokens', () => {
+    expect(estimateTokens(prdSkillMarkdown())).toBeLessThanOrEqual(600);
   });
   it('handoff template ≤ 300 tokens', () => {
     const doc = buildHandoffDoc({

@@ -16,6 +16,9 @@ All notable changes to vibeguard-pack are documented here. The format follows
   once a dependency manifest exists). New **plan-interview skill** ("grill me"):
   the agent interviews you about every branch of the plan's decision tree until
   shared understanding, exploring the codebase instead of asking when it can.
+  New **write-a-prd skill**: problem description → codebase verification →
+  relentless interview → deep-module design (user-validated, tests chosen by
+  the user) → PRD filed as a GitHub issue from a fixed template.
   **Locked token budgets**: every agent-facing artifact (rules skill, protocol
   block, interview skill, handoff template) now has a maximum token cost
   asserted in the test suite — raising a budget is an owner decision.

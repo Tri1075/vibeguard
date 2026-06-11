@@ -66,7 +66,9 @@ You never have to read the code to know whether it's healthy. That's the point.
 | 8   | **No dead code**         | No commented-out leftovers, no unused exports. Clean house.                                                     |
 | 9   | **No swallowed errors**  | When something fails, you hear about it — errors never vanish silently.                                         |
 
-**Bonus — "grill me".** Got a plan but not sure it holds? Say *"grill me"* and your AI interviews you about every branch of it, one question at a time, until you both actually agree on what you're building. (Ships as a second skill on Claude Code.)
+**Bonus — "grill me".** Got a plan but not sure it holds? Say *"grill me"* and your AI interviews you about every branch of it, one question at a time, until you both actually agree on what you're building.
+
+**Bonus — "write a PRD".** Going from idea to feature? Your AI gathers your problem story, verifies it against the codebase, grills you on the design, sketches the modules with you — then files the whole thing as a clean GitHub issue. (Both ship as extra skills on Claude Code.)
 
 Every rule is yours to tune. Experienced engineers can edit any rule, raise any limit, disable anything — the AI never can. That line is enforced by the engine, not by trust.
 
