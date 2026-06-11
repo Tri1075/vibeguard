@@ -23,6 +23,12 @@ jobs:
       - run: npm run format:check
       - run: npm test
       - run: node dist/bin.js -C . check # dogfood: the pack passes its own gates
+      # Prove the COMMITTED plugin binaries drive the whole hook lifecycle —
+      # bootstrap → journal → Stop blocks a regression — which is exactly what
+      # `/plugin marketplace add` ships (clone, no build). Runs on every OS in
+      # the matrix: the binaries are platform-sensitive (a macOS-only realpath
+      # bug once slipped a false "tamper" past the unit tests).
+      - run: bash scripts/smoke-plugin.sh
       # Plugin skills must match the TS source. `git diff` ignores untracked
       # files, so a NEW skill added in source but never committed would slip
       # through — stage first, then diff the index, to catch additions too.

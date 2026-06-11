@@ -19,18 +19,25 @@ const out = path.join(root, 'plugin-bin');
 const driftSrc = process.env['DRIFTGUARD_SRC'] ?? path.join(root, '..', 'driftguard');
 
 function bundle(name, cwd) {
+  const dest = path.join(out, name);
   // Array args, no shell string: paths can't be re-interpreted as shell syntax.
-  const args = [
-    '-y',
-    '@vercel/ncc',
-    'build',
-    'src/bin.ts',
-    '-o',
-    path.join(out, name),
-    '-m',
-    '--no-source-map-register',
-  ];
+  const args = ['-y', '@vercel/ncc', 'build', 'src/bin.ts', '-o', dest, '-m', '--no-source-map-register'];
   execFileSync('npx', args, { cwd, stdio: 'inherit' });
+  pruneTypeDecls(dest);
+}
+
+/**
+ * ncc emits the inlined dependencies' `.d.ts` files next to `index.js` — pure
+ * type cruft the runtime never loads. Drop them so the committed release is just
+ * the single executable bundle (plus ncc's tiny package.json), not 135 stray
+ * declaration files.
+ */
+function pruneTypeDecls(dir) {
+  for (const entry of fs.readdirSync(dir, { recursive: true, withFileTypes: true })) {
+    if (entry.isFile() && entry.name.endsWith('.d.ts')) {
+      fs.rmSync(path.join(entry.parentPath ?? entry.path, entry.name));
+    }
+  }
 }
 
 fs.rmSync(out, { recursive: true, force: true });

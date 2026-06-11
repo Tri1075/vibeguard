@@ -39,7 +39,7 @@ export async function bootstrapCommand(cwd: string, opts: BootstrapOptions): Pro
   // an engineer's first impression should catch the AI's dangerous moves, not
   // nag their style. They can re-init with --profile/--posture to change it.
   if (!fs.existsSync(paths.rulesFile)) {
-    await initCommand(root, { profile: 'experienced', posture: 'guardian' });
+    await initCommand(root, { profile: 'experienced', posture: 'guardian', quiet: opts.quiet ?? false });
   }
 
   // 2-4. driftguard: config, gate probes, baseline. Only when the engine exists.

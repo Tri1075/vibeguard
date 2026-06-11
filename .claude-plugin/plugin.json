@@ -1,6 +1,6 @@
 {
   "name": "vibeguard",
-  "description": "9 engineering rules every AI coding agent must follow, plus a workflow toolbox (grill me, write a PRD, to issues, TDD, diagnose, caveman). The law half of vibeguard — pair with `npx vibeguard` gates and driftguard for enforcement.",
+  "description": "The whole vibeguard loop, self-contained: 9 engineering rules every AI agent must follow, the gates that verify them, live drift enforcement (the session scopes itself and the agent is blocked when it breaks a green check), and a workflow toolbox (grill me, write a PRD, to issues, TDD, diagnose, caveman). No npm install, no build — bundled binaries run from the plugin.",
   "version": "0.1.0",
   "author": {
     "name": "Tri1075"

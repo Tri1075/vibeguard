@@ -6,3 +6,4 @@ coverage/
 .driftguard/
 skills/
 .claude/
+plugin-bin/

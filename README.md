@@ -51,11 +51,14 @@ Prompt rules _ask_ the AI nicely — and it rationalizes around them. Linters ch
 One command on Claude Code, or one npm dependency for any other agent. Then it's invisible until something's wrong.
 
 ```sh
-# Claude Code (plugin — the rules + the workflow skills):
+# Claude Code (plugin — the WHOLE loop, zero-config: rules, gates, live
+# enforcement and the workflow skills, all self-contained — no npm, no build):
 /plugin marketplace add Tri1075/vibeguard-pack
 /plugin install vibeguard@vibeguard
+# Each session now auto-governs itself: it scopes the project at startup and
+# blocks the agent at the end of any turn that broke a green check.
 
-# The gates + enforcement (any agent: Claude Code, Cursor, Codex, Gemini, aider, local models…):
+# Any other agent (Cursor, Codex, Gemini, aider, local models…):
 npm i -D vibeguard-pack
 npx vibeguard init          # one question: beginner or experienced?
 npx vibeguard run claude    # your session is now governed

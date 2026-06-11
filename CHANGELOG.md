@@ -8,6 +8,25 @@ All notable changes to vibeguard-pack are documented here. The format follows
 
 ### Added
 
+- **M15a — the zero-friction plugin, made real.** M11 built the plugin
+  foundation but it had never run in a real session and the bundled binaries
+  were gitignored. A new reproducible smoke (`scripts/smoke-plugin.sh`) drives
+  the exact hook lifecycle Claude Code fires — SessionStart→`bootstrap`,
+  PostToolUse→journal, Stop→block — against the **bundled** binaries (no dev
+  build, no npx), and it caught the bug that made the whole thing decorative:
+  with no declared scope the Stop guard released a green→red **regression**
+  instead of blocking it (fixed in driftguard; the plugin never declares a scope,
+  so enforcement was inert out of the box). The bundles are now **committed**
+  under `plugin-bin/` (a Claude Code plugin is cloned, not built), excluded from
+  the gates, and PII-scanned; the smoke runs in CI on every OS/Node in the
+  matrix so a future bundling break can't ship silently. `bundle:plugin` now
+  prunes ncc's stray `.d.ts` output, and `bootstrap --quiet` is finally quiet —
+  `initCommand` gained a `quiet` option threaded through bootstrap, so the
+  plugin's SessionStart no longer prints the full `init` banner (the driftguard
+  hook emits the one framing line instead). Threading it surfaced a latent
+  `exactOptionalPropertyTypes` error that `tsup`/`vitest` skip but ncc catches,
+  so `npm run typecheck` is now part of the bundle flow.
+
 - **M14 — two dials + engineer positioning.** Adoption hinges on engineers not
   feeling babysat, so the tool now scales to both the person and the task.
   _Posture_ (`vibeguard init --posture guardian|strict`, also a `posture` field

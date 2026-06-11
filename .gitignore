@@ -6,5 +6,7 @@ coverage/
 .driftguard/state/
 .driftguard/backups/
 
-# generated plugin binaries (built by scripts/bundle-plugin.mjs; committed at release)
-plugin-bin/
+# NOTE: plugin-bin/ (the bundled plugin binaries from scripts/bundle-plugin.mjs)
+# is intentionally COMMITTED — a Claude Code plugin is cloned, not built, so the
+# self-contained binaries must ship in the repo. Rebuild with `npm run
+# bundle:plugin` and re-commit at each release.

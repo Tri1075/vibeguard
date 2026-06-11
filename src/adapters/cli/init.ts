@@ -21,6 +21,8 @@ export interface InitOptions {
   profile?: 'beginner' | 'experienced';
   posture?: Posture;
   force?: boolean;
+  /** suppress all human-facing output — used when bootstrap runs init at SessionStart */
+  quiet?: boolean;
 }
 
 export async function initCommand(cwd: string, opts: InitOptions): Promise<void> {
@@ -44,6 +46,7 @@ export async function initCommand(cwd: string, opts: InitOptions): Promise<void>
   if (!fs.existsSync(paths.debtFile)) await writeFileAtomic(paths.debtFile, debtLedgerHeader());
   if (!fs.existsSync(paths.depsBaselineFile)) await seedDepsBaseline(root, paths);
   const linked = await registerWithDriftguard(root);
+  if (opts.quiet) return; // bootstrap prints its own one-liner (or nothing) at SessionStart
 
   process.stdout.write(
     `${pc.green('✓ vibeguard initialized')} (level: ${profile}, posture: ${posture}${posture === 'guardian' ? ' — blocks the AI’s dangerous moves, advises on style' : ' — full clean-code bar'})\n` +
