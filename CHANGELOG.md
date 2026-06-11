@@ -6,6 +6,32 @@ All notable changes to vibeguard-pack are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- **M7 — audit remediation.** A four-auditor pass hardened the silent-failure
+  surface. **Config:** a partial `rules.json` entry no longer silently promotes
+  an advisory `warn` rule to `block` (zod defaults dropped for `severity`/
+  `enabled`); a schema-invalid `rules.json` now fails loudly instead of
+  reverting to defaults. **Wrapper:** `vibeguard run` returns a faithful exit
+  code — 127 when the agent CLI can't be launched, `128+signal` on a signal
+  death, instead of a misleading 0 (its e2e now uses a real stub on PATH, no
+  longer passing only because the CLI was absent). **Driftguard probes** call
+  `npx -y vibeguard-pack` (the published package) instead of the bare
+  `vibeguard` name. **Gate precision:** secure-code stopped firing on the
+  French word "des" (`\bDES\b` no longer `/i`), on method calls like
+  `model.eval()`, and on `delete cache['a'+k]`; it now skips comment lines.
+  no-tech-debt now catches trailing-comment markers (`doWork(); // TODO`,
+  string-aware), skips Markdown headings, and treats an empty `markers` list as
+  "disabled" (was "match everything"). no-secrets scans `.env.local`/unquoted
+  env values and fine-grained GitHub PATs. `check <unknown-rule>` exits 2
+  instead of a green 0; `deps approve Flask` stores under the matched key;
+  `init --force` preserves the debt ledger and deps baseline; deps-hygiene now
+  counts `devDependencies`. **Packaging:** the GitHub Action passes inputs via
+  `env` (no `${{ }}`-into-`run` injection) and defaults to a pinned version;
+  the CI plugin-sync check stages first so it catches untracked skills;
+  AGENTS.md block repair recovers from corrupted markers; the npm `files`
+  whitelist ships the plugin and docs, not the internal framing doc.
+
 ### Added
 
 - **M5 — distribution & self-governance.** License switched to **MIT**.

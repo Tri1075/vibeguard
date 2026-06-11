@@ -21,8 +21,11 @@
   "sideEffects": false,
   "files": [
     "dist",
+    "skills",
+    ".claude-plugin",
     "README.md",
-    "FRAMING.md"
+    "CHANGELOG.md",
+    "docs"
   ],
   "scripts": {
     "build": "tsup",

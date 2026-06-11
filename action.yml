@@ -9,9 +9,9 @@ inputs:
     required: false
     default: 'check --ci'
   version:
-    description: 'vibeguard-pack npm version to run'
+    description: 'vibeguard-pack npm version to run (pin to a release; "latest" auto-runs new publishes)'
     required: false
-    default: 'latest'
+    default: '0.1.0'
   working-directory:
     description: 'project directory'
     required: false
@@ -22,4 +22,11 @@ runs:
     - name: Run vibeguard
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-      run: npx -y vibeguard-pack@${{ inputs.version }} ${{ inputs.command }}
+      # Inputs are passed through env, never interpolated into the script: a
+      # `${{ }}` expansion of caller-controlled data into `run:` would be shell
+      # injection. Shell metacharacters inside an env value are not re-parsed as
+      # syntax, so $VG_COMMAND only ever word-splits into npx arguments.
+      env:
+        VG_VERSION: ${{ inputs.version }}
+        VG_COMMAND: ${{ inputs.command }}
+      run: npx -y "vibeguard-pack@$VG_VERSION" $VG_COMMAND

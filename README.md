@@ -56,7 +56,7 @@ Never written code before? Run the three commands above, answer **beginner**, an
 | 8   | **No dead code**         | No commented-out leftovers, no unused exports. Clean house.                                                             |
 | 9   | **No swallowed errors**  | When something fails, you hear about it — errors never vanish silently.                                                 |
 
-Every rule is yours to tune — and only yours: the AI can never edit `.vibeguard/**`. That line is enforced by the engine, not by trust.
+Every rule is yours to tune — and only yours. **With [driftguard](https://github.com/Tri1075/driftguard) installed**, `.vibeguard/**` is a protected path: an agent edit to it is flagged as drift and blocked at the end of the turn. Standalone (gates only), that boundary is a convention the law states, not yet a lock — install driftguard for enforcement.
 
 ## The workflow skills
 
@@ -101,7 +101,7 @@ vibeguard obeys its own nine rules in CI on every commit, and **develops under i
 
 ## Contributing
 
-vibeguard wants to become **the reference for clean AI-assisted code** — new rules, new languages, sharper gates: adding a rule is deliberately a two-small-files job ([CONTRIBUTING.md](CONTRIBUTING.md)).
+vibeguard wants to become **the reference for clean AI-assisted code** — new rules, new languages, sharper gates: adding a rule is a small, well-scoped job (a law + a gate + its registry entry and tests — see [CONTRIBUTING.md](CONTRIBUTING.md)).
 
 **Roadmap**: ✅ 9 rules law+police · wrapper · 120K handoff · driftguard enforcement · patterns→CLAUDE.md · plugin marketplace — ⏳ AST gates · more languages · public launch.
 

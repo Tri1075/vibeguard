@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        node: [20, 22]
+        node: [20, 22, 24]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -23,4 +23,7 @@ jobs:
       - run: npm run format:check
       - run: npm test
       - run: node dist/bin.js -C . check # dogfood: the pack passes its own gates
-      - run: node scripts/emit-plugin.mjs && git diff --exit-code skills/ # plugin skills in sync with the TS source
+      # Plugin skills must match the TS source. `git diff` ignores untracked
+      # files, so a NEW skill added in source but never committed would slip
+      # through — stage first, then diff the index, to catch additions too.
+      - run: node scripts/emit-plugin.mjs && git add -A skills/ && git diff --cached --exit-code skills/

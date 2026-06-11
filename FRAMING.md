@@ -32,7 +32,7 @@ LLMs code fast and drift fast: bloated modules, silent technical debt, parachute
    - Warning at **100K tokens**: finish the current step, start nothing new.
    - **120K = mandatory handoff**: the agent writes `HANDOFF.md` (task & scope state, decisions and why, files touched, next steps, known traps, driftguard verdict) then asks the user to relaunch a fresh session.
    - The next session re-injects `HANDOFF.md` (headroom-compressed) at startup. **driftguard is the continuity backbone**: scope, baseline, attribution journal and decisions persist in `.driftguard/state/` across handoffs — the fresh session inherits the contract, and drift detection spans the session boundary.
-   - Police: Claude Code adapter = precise counting via the session transcript (hooks receive `transcript_path`); other hosts = skill self-monitoring + headroom proxy counting when present (best effort, documented).
+   - Police (current): `vibeguard tokens` estimates context size with a 4-chars/token heuristic over a file or stdin, and the emitted law instructs the agent to self-monitor and hand off. Precise transcript-based counting (Claude Code hooks receive `transcript_path`) and headroom-compressed handoff re-injection are planned, not yet implemented — the discipline today is taught by the law, not measured exactly.
 
 ## 4. The nine rules
 
@@ -77,7 +77,7 @@ HANDOFF.md                    # written at 120K, re-injected next session
 - **Owner/agent boundary**: everything is customizable by the human, nothing by the agent — same proven mechanics as driftguard (protected paths + human approval + audit).
 - **Experience-level onboarding** (at `init`, TTY only; `--profile` flag for CI): the user picks **beginner** (defaults untouched, instructions include extended "why it matters" pedagogy, next steps printed) or **experienced** (same safe defaults, closing message points to `rules.json` + `instructions/` for personalization: "they are yours — agents may never touch them"). Profiles change guidance, not protection: both levels get the full gate set.
 - **Commenting standard (for collaborators)**: every module starts with a header comment stating its role and constraints; every exported symbol carries a doc comment; inline comments state non-obvious constraints. The 200-line rule counts _code_ lines only, so documentation is never penalized — commenting generously is part of the pack's own law.
-- **Monorepo layout**: `core/` (gates, host-agnostic) / `adapters/` (cli, driftguard, hosts) / `laws/` (one module per rule text). **Full dogfooding: the pack obeys its own 7 rules and runs under driftguard.** driftguard itself is customer #1 (several of its modules exceed 200 code lines and will be split — the first real-world demo).
+- **Monorepo layout**: `core/` (gates, host-agnostic) / `adapters/` (cli, driftguard, hosts) / `laws/` (one module per rule text). **Full dogfooding: the pack obeys its own 9 rules and runs under driftguard.** driftguard itself is customer #1 (several of its modules exceed 200 code lines and will be split — the first real-world demo).
 
 ## 6. A typical session (the full flow)
 
