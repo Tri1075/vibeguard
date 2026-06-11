@@ -8,6 +8,14 @@ All notable changes to vibeguard-pack are documented here. The format follows
 
 ### Added
 
+- **M13 — demo.** `demo/run-demo.sh` runs the real loop on a throwaway project
+  (govern → drift → block with the decision grammar → self-correct →
+  patterns→CLAUDE.md) and `demo/demo.tape` renders it to a GIF with vhs.
+  Anonymized by construction — a `mktemp` dir, a neutral git identity, a forced
+  `PS1='$ '`, and local-binary probes (no npx, so no npm-log paths leak). PII
+  audit of both repos (working tree + full git history + commit identities)
+  came back clean.
+
 - **M12 — self-review skill ("metacognition").** A new companion skill makes the
   agent its own first reviewer: after editing it surfaces what it touched
   (`driftguard compare`), judges each change against the rules (`vibeguard
