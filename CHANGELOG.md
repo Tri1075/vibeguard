@@ -6,6 +6,16 @@ All notable changes to vibeguard-pack are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- **M10 — grill-with-docs & marketing.** The `plan-interview` skill ("grill
+  me") evolved to follow Matt Pocock's `grill-with-docs`: it now grills the
+  plan against the codebase's **domain model**, sharpens shared terminology,
+  and persists the understanding into `CONTEXT.md` + short ADRs as it goes
+  (token budget 250 → 400). README reworked for clarity on what the plugin
+  delivers, an honest "why it's different" comparison (vs prompt-rule packs,
+  linters, and skill collections), and a lighter-touch star ask.
+
 ### Fixed
 
 - **M7 — audit remediation.** A four-auditor pass hardened the silent-failure

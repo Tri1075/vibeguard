@@ -9,7 +9,7 @@
 [![Node](https://img.shields.io/badge/node-%E2%89%A520-brightgreen.svg)](package.json)
 [![dogfooded](https://img.shields.io/badge/dogfooded-100%25-success.svg)](#we-eat-our-own-cooking)
 
-**⭐ If you believe everyone — beginner or expert — deserves to ship clean code, star this repo.**
+_The clean-code guardrails for AI agents — taught as rules, enforced as code, and they learn from every mistake._
 
 </div>
 
@@ -27,7 +27,22 @@ An AI coding agent is a brilliant intern with infinite energy and **zero supervi
 
 That last column is the part nobody else does: the guard doesn't just catch drift, **it closes the loop** so the same drift stops happening.
 
+## Why it's different
+
+Most tools that try to make AI write better code do one of these things. vibeguard is the only one that does all four:
+
+|                                                | Prompt-rule packs | Linters (ESLint…) | Skill collections |  **vibeguard**  |
+| ---------------------------------------------- | :---------------: | :---------------: | :---------------: | :-------------: |
+| Teaches the AI what "good" means               |        ✅         |         —         |        ✅         |       ✅        |
+| Deterministically checks the rule was followed |         —         |   ✅ _(style)_    |         —         | ✅ _(behavior)_ |
+| Blocks the agent until it fixes its own mess   |         —         |         —         |         —         |       ✅        |
+| Turns a recurring mistake into a standing rule |         —         |         —         |         —         |       ✅        |
+
+Prompt rules _ask_ the AI nicely — and it rationalizes around them. Linters check your syntax, brilliantly, but they don't govern what the agent _does_ or stop it mid-session. Skill collections (like the excellent [agent-skills](https://github.com/addyosmani/agent-skills)) teach great workflows, but nothing checks the agent actually followed them. vibeguard pairs every rule with a deterministic gate, blocks the agent at the end of its turn until it self-corrects, and promotes each recurring mistake into a rule it won't repeat. **It doesn't replace your linter — it governs the AI that writes the code your linter checks.**
+
 ## Install
+
+One command on Claude Code, or one npm dependency for any other agent. Then it's invisible until something's wrong.
 
 ```sh
 # Claude Code (plugin — the rules + the workflow skills):
@@ -60,16 +75,16 @@ Every rule is yours to tune — and only yours. **With [driftguard](https://gith
 
 ## The workflow skills
 
-| Skill              | Say…             | What it does                                                                                           |
-| ------------------ | ---------------- | ------------------------------------------------------------------------------------------------------ |
-| **plan-interview** | "grill me"       | Interviews you about every branch of your plan, one question at a time, until you truly agree.         |
-| **write-a-prd**    | "write a PRD"    | Problem story → codebase verification → design grilling → module sketch → PRD filed as a GitHub issue. |
-| **to-issues**      | "to issues"      | Slices the plan/PRD into independent, vertically-sliced GitHub issues anyone can grab.                 |
-| **tdd**            | "build this TDD" | Red-green-refactor, one vertical slice at a time. Weakening a test counts as drift.                    |
-| **diagnose**       | "diagnose this"  | Disciplined bug loop: reproduce, minimize, hypothesize, instrument, fix, regression-test.              |
-| **caveman**        | "caveman mode"   | Ultra-terse replies to stretch your context window — warnings never compressed away.                   |
+| Skill              | Say…             | What it does                                                                                                                           |
+| ------------------ | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **plan-interview** | "grill me"       | Grills your plan against the codebase's domain model, pins down the shared vocabulary, and captures it in CONTEXT.md + ADRs as you go. |
+| **write-a-prd**    | "write a PRD"    | Problem story → codebase verification → design grilling → module sketch → PRD filed as a GitHub issue.                                 |
+| **to-issues**      | "to issues"      | Slices the plan/PRD into independent, vertically-sliced GitHub issues anyone can grab.                                                 |
+| **tdd**            | "build this TDD" | Red-green-refactor, one vertical slice at a time. Weakening a test counts as drift.                                                    |
+| **diagnose**       | "diagnose this"  | Disciplined bug loop: reproduce, minimize, hypothesize, instrument, fix, regression-test.                                              |
+| **caveman**        | "caveman mode"   | Ultra-terse replies to stretch your context window — warnings never compressed away.                                                   |
 
-Several are inspired by [Matt Pocock's skills](https://github.com/mattpocock/skills) (MIT) — credit where credit is due. Using [Addy Osmani's agent-skills](https://github.com/addyosmani/agent-skills)? They compose: [their workflows on top, our enforcement underneath](docs/agent-skills.md).
+Several are inspired by [Matt Pocock's skills](https://github.com/mattpocock/skills) (MIT) — "grill me" follows his `grill-with-docs`, credit where credit is due. Using [Addy Osmani's agent-skills](https://github.com/addyosmani/agent-skills)? They compose: [their workflows on top, our enforcement underneath](docs/agent-skills.md).
 
 ## For engineers
 
@@ -99,9 +114,11 @@ Several are inspired by [Matt Pocock's skills](https://github.com/mattpocock/ski
 
 vibeguard obeys its own nine rules in CI on every commit, and **develops under its own governance**: driftguard probes, declared scopes, arbitrated drift. Its companion driftguard was customer #1 — the gates found six oversized modules and seven pieces of dead code in it, and the AI that maintains it was made to fix every one.
 
-## Contributing
+## Built in the open
 
-vibeguard wants to become **the reference for clean AI-assisted code** — new rules, new languages, sharper gates: adding a rule is a small, well-scoped job (a law + a gate + its registry entry and tests — see [CONTRIBUTING.md](CONTRIBUTING.md)).
+MIT, and built to be extended. Adding a rule is a small, well-scoped job — a law, a gate, a registry entry, and tests ([CONTRIBUTING.md](CONTRIBUTING.md)) — so the rule set can grow with the community rather than with one maintainer. New rules, new languages, sharper gates, and bug reports are all genuinely welcome. The goal is a shared standard for clean AI-assisted code that belongs to everyone who relies on it.
+
+If vibeguard ever catches something before it reaches your main branch, a ⭐ helps the next person find it — that's the only nudge you'll get here.
 
 **Roadmap**: ✅ 9 rules law+police · wrapper · 120K handoff · driftguard enforcement · patterns→CLAUDE.md · plugin marketplace — ⏳ AST gates · more languages · public launch.
 

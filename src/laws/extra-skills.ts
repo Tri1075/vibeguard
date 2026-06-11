@@ -20,7 +20,7 @@ export interface ExtraSkill {
 }
 
 export const EXTRA_SKILLS: ExtraSkill[] = [
-  { name: 'vibeguard-plan-interview', markdown: interviewSkillMarkdown, budgetTokens: 250 },
+  { name: 'vibeguard-plan-interview', markdown: interviewSkillMarkdown, budgetTokens: 400 },
   { name: 'vibeguard-write-a-prd', markdown: prdSkillMarkdown, budgetTokens: 600 },
   { name: 'vibeguard-to-issues', markdown: toIssuesSkillMarkdown, budgetTokens: 350 },
   { name: 'vibeguard-tdd', markdown: tddSkillMarkdown, budgetTokens: 350 },
