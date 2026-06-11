@@ -1,10 +1,16 @@
 /** Single source of truth for .vibeguard/rules.json (the owner's control panel). */
 import { z } from 'zod';
 
-/** One rule entry: toggle, severity, free-form params, scoped ignores. */
+/**
+ * One rule entry. `enabled` and `severity` are OPTIONAL with no default on
+ * purpose: resolveRules() falls back to each rule's registry default via `??`,
+ * so a partial entry (e.g. just `params`) must NOT see a zod-injected value —
+ * otherwise touching one param of an advisory `warn` rule would silently
+ * promote it to `block`. Absence here means "inherit the registry default".
+ */
 const RuleEntrySchema = z.object({
-  enabled: z.boolean().default(true),
-  severity: z.enum(['block', 'warn']).default('block'),
+  enabled: z.boolean().optional(),
+  severity: z.enum(['block', 'warn']).optional(),
   params: z.record(z.unknown()).default({}),
   ignore: z.array(z.string()).default([]),
 });

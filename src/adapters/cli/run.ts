@@ -4,6 +4,7 @@
  * by headroom for token economy).
  */
 import { existsSync } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { execa } from 'execa';
 import pc from 'picocolors';
@@ -57,7 +58,25 @@ export async function runCommand(
   process.stdout.write(`${pc.green('✓ governed session starting')} → ${bin} ${args.join(' ')}\n`);
 
   const child = await execa(bin, args, { cwd: root, stdio: 'inherit', reject: false });
-  process.exit(child.exitCode ?? 0);
+  process.exit(exitCodeFor(child, bin));
+}
+
+/**
+ * Map an execa result to a faithful exit code. With `reject:false`, a clean
+ * run carries a numeric `exitCode`; a spawn failure (e.g. the agent CLI is not
+ * installed) and a signal death BOTH leave `exitCode` undefined. Returning 0
+ * there would tell a calling script the agent ran when it never did — the exact
+ * silent success the wrapper must not produce.
+ */
+function exitCodeFor(child: { exitCode?: number; signal?: string }, bin: string): number {
+  if (typeof child.exitCode === 'number') return child.exitCode;
+  if (child.signal) {
+    process.stderr.write(`${pc.red(`✗ ${bin} terminated by ${child.signal}`)}\n`);
+    const num = os.constants.signals[child.signal as NodeJS.Signals];
+    return typeof num === 'number' ? 128 + num : 1;
+  }
+  process.stderr.write(`${pc.red(`✗ could not launch "${bin}"`)} — is it installed and on your PATH?\n`);
+  return 127;
 }
 
 /** Best-effort fresh baseline so driftguard measures drift from "now". */

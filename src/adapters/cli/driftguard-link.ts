@@ -33,12 +33,18 @@ export async function registerWithDriftguard(root: string): Promise<boolean> {
   return true;
 }
 
-/** One probe per gate: `vibeguard check <id> --ci` exits non-zero on a block. */
+/**
+ * One probe per gate: `vibeguard check <id> --ci` exits non-zero on a block.
+ * The npm package is `vibeguard-pack` (its bin is `vibeguard`); a package's
+ * own bin is never linked into its own node_modules/.bin, so a bare
+ * `npx vibeguard` would fall through to an unrelated registry package named
+ * "vibeguard". `npx -y vibeguard-pack check …` runs our single-bin package.
+ */
 function mergeProbes(existing: Probe[]): Probe[] {
   const foreign = existing.filter((p) => !p.name.startsWith('vibeguard-'));
   const ours = GATES.map((g) => ({
     name: `vibeguard-${g.id}`,
-    cmd: `npx vibeguard check ${g.id} --ci`,
+    cmd: `npx -y vibeguard-pack check ${g.id} --ci`,
     timeoutMs: 60_000,
     unstable: false,
   }));

@@ -7,45 +7,73 @@ import { execa, type Result } from 'execa';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 const BIN = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../dist/bin.js');
+const posixOnly = process.platform === 'win32' ? it.skip : it;
 let dir: string;
+let binDir: string;
 
-function vg(args: string[]): Promise<Result> {
-  return execa('node', [BIN, '-C', dir, ...args], { reject: false, env: { ...process.env, NO_COLOR: '1' } });
+function vg(args: string[], extraPath?: string): Promise<Result> {
+  const PATH = extraPath ? `${extraPath}${path.delimiter}${process.env['PATH'] ?? ''}` : process.env['PATH'];
+  return execa('node', [BIN, '-C', dir, ...args], {
+    reject: false,
+    env: { ...process.env, NO_COLOR: '1', PATH },
+  });
+}
+
+/** Put a stub executable named `name` on PATH; it records that it ran. */
+async function stubCli(name: string): Promise<string> {
+  const marker = path.join(dir, `${name}.ran`);
+  await fsp.writeFile(path.join(binDir, name), `#!/bin/sh\nprintf 'args:%s' "$*" > "${marker}"\nexit 0\n`, {
+    mode: 0o755,
+  });
+  return marker;
 }
 
 beforeEach(async () => {
   dir = await fsp.mkdtemp(path.join(os.tmpdir(), 'vibeguard-m2-'));
+  binDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'vibeguard-bin-'));
   await fsp.writeFile(path.join(dir, 'package.json'), JSON.stringify({ name: 'demo' }), 'utf8');
   await vg(['init', '--profile', 'experienced']);
 });
 afterEach(async () => {
   await fsp.rm(dir, { recursive: true, force: true });
+  await fsp.rm(binDir, { recursive: true, force: true });
 });
 
 describe('vibeguard run', () => {
-  it('emits a Claude Code skill and launches the agent CLI on green', async () => {
-    const res = await vg(['run', 'claude', '--no-headroom', 'echo', 'hi']);
+  posixOnly('emits a Claude Code skill and actually launches the agent CLI on green', async () => {
+    const marker = await stubCli('claude');
+    const res = await vg(['run', 'claude', '--no-headroom'], binDir);
     expect(res.exitCode).toBe(0);
     expect(String(res.stdout)).toContain('Claude Code');
     const skill = await fsp.readFile(path.join(dir, '.claude/skills/vibeguard/SKILL.md'), 'utf8');
     expect(skill).toContain('name: vibeguard');
+    // The launch is real, not a vacuous pass: the stub left its marker.
+    expect(await fsp.readFile(marker, 'utf8')).toContain('args:');
   });
 
-  it('writes a managed AGENTS.md block for generic hosts, preserving user content', async () => {
+  posixOnly('writes a managed AGENTS.md block for generic hosts, preserving user content', async () => {
+    await stubCli('aider');
     await fsp.writeFile(path.join(dir, 'AGENTS.md'), '# My project notes\nkeep me\n', 'utf8');
-    await vg(['run', 'aider', '--no-headroom', 'true']);
+    await vg(['run', 'aider', '--no-headroom'], binDir);
     const agents = await fsp.readFile(path.join(dir, 'AGENTS.md'), 'utf8');
     expect(agents).toContain('keep me'); // user content preserved
     expect(agents).toContain('vibeguard:start');
     expect(agents).toContain('engineering rules (mandatory)');
   });
 
+  it('reports a non-zero exit code when the agent CLI cannot be launched', async () => {
+    const res = await vg(['run', 'no-such-agent-xyz', '--no-headroom']);
+    expect(res.exitCode).toBe(127);
+    expect(String(res.stderr)).toContain('could not launch');
+  });
+
   it('refuses to start on red, unless --force', async () => {
+    await stubCli('aider');
     await fsp.writeFile(path.join(dir, 'leak.js'), 'const k = "AKIAIOSFODNN7EXAMPLE";\n', 'utf8');
-    const blocked = await vg(['run', 'aider', '--no-headroom', 'true']);
+    const blocked = await vg(['run', 'aider', '--no-headroom'], binDir);
     expect(blocked.exitCode).toBe(1);
     expect(String(blocked.stderr)).toContain('refusing to start');
-    const forced = await vg(['run', 'aider', '--no-headroom', '--force', 'true']);
+    const forced = await vg(['run', 'aider', '--no-headroom', '--force'], binDir);
     expect(forced.exitCode).toBe(0);
   });
 });
