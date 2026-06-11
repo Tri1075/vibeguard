@@ -10,6 +10,7 @@ import { toIssuesSkillMarkdown } from './to-issues.js';
 import { tddSkillMarkdown } from './tdd.js';
 import { diagnoseSkillMarkdown } from './diagnose.js';
 import { cavemanSkillMarkdown } from './caveman.js';
+import { selfReviewSkillMarkdown } from './self-review.js';
 
 export interface ExtraSkill {
   /** skill name; also the emitted directory: .claude/skills/<name>/SKILL.md */
@@ -26,4 +27,5 @@ export const EXTRA_SKILLS: ExtraSkill[] = [
   { name: 'vibeguard-tdd', markdown: tddSkillMarkdown, budgetTokens: 350 },
   { name: 'vibeguard-diagnose', markdown: diagnoseSkillMarkdown, budgetTokens: 350 },
   { name: 'vibeguard-caveman', markdown: cavemanSkillMarkdown, budgetTokens: 200 },
+  { name: 'vibeguard-self-review', markdown: selfReviewSkillMarkdown, budgetTokens: 450 },
 ];

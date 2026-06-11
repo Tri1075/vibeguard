@@ -8,6 +8,15 @@ All notable changes to vibeguard-pack are documented here. The format follows
 
 ### Added
 
+- **M12 — self-review skill ("metacognition").** A new companion skill makes the
+  agent its own first reviewer: after editing it surfaces what it touched
+  (`driftguard compare`), judges each change against the rules (`vibeguard
+check`), the declared scope, and the plan, fixes its own mistakes, records the
+  reasoning, and re-verifies in a loop before handing back. Composed with the
+  patterns→CLAUDE.md learning loop, the agent corrects and improves itself —
+  the human arbitrates only what it genuinely cannot decide. (Pairs with the
+  driftguard M12 Stop-latency cure so that self-review is cheap to run often.)
+
 - **M11 — zero-friction plugin (foundation).** Toward "one install governs
   every project": a `vibeguard bootstrap` command does the whole idempotent
   setup in one shot (rules + driftguard config + gate probes + baseline), so a

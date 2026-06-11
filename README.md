@@ -75,14 +75,15 @@ Every rule is yours to tune — and only yours. **With [driftguard](https://gith
 
 ## The workflow skills
 
-| Skill              | Say…             | What it does                                                                                                                           |
-| ------------------ | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| **plan-interview** | "grill me"       | Grills your plan against the codebase's domain model, pins down the shared vocabulary, and captures it in CONTEXT.md + ADRs as you go. |
-| **write-a-prd**    | "write a PRD"    | Problem story → codebase verification → design grilling → module sketch → PRD filed as a GitHub issue.                                 |
-| **to-issues**      | "to issues"      | Slices the plan/PRD into independent, vertically-sliced GitHub issues anyone can grab.                                                 |
-| **tdd**            | "build this TDD" | Red-green-refactor, one vertical slice at a time. Weakening a test counts as drift.                                                    |
-| **diagnose**       | "diagnose this"  | Disciplined bug loop: reproduce, minimize, hypothesize, instrument, fix, regression-test.                                              |
-| **caveman**        | "caveman mode"   | Ultra-terse replies to stretch your context window — warnings never compressed away.                                                   |
+| Skill              | Say…              | What it does                                                                                                                                    |
+| ------------------ | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| **plan-interview** | "grill me"        | Grills your plan against the codebase's domain model, pins down the shared vocabulary, and captures it in CONTEXT.md + ADRs as you go.          |
+| **write-a-prd**    | "write a PRD"     | Problem story → codebase verification → design grilling → module sketch → PRD filed as a GitHub issue.                                          |
+| **to-issues**      | "to issues"       | Slices the plan/PRD into independent, vertically-sliced GitHub issues anyone can grab.                                                          |
+| **tdd**            | "build this TDD"  | Red-green-refactor, one vertical slice at a time. Weakening a test counts as drift.                                                             |
+| **diagnose**       | "diagnose this"   | Disciplined bug loop: reproduce, minimize, hypothesize, instrument, fix, regression-test.                                                       |
+| **caveman**        | "caveman mode"    | Ultra-terse replies to stretch your context window — warnings never compressed away.                                                            |
+| **self-review**    | "review yourself" | Metacognition: the agent audits its own changes against the rules, scope, and plan, fixes what it broke, and records why — before handing back. |
 
 Several are inspired by [Matt Pocock's skills](https://github.com/mattpocock/skills) (MIT) — "grill me" follows his `grill-with-docs`, credit where credit is due. Using [Addy Osmani's agent-skills](https://github.com/addyosmani/agent-skills)? They compose: [their workflows on top, our enforcement underneath](docs/agent-skills.md).
 
