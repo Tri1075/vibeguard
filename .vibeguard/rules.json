@@ -7,6 +7,21 @@
     "vendor/**"
   ],
   "rules": {
+    "plan-first": {
+      "enabled": true,
+      "severity": "warn",
+      "params": {
+        "minSections": 3,
+        "minLines": 15
+      },
+      "ignore": []
+    },
+    "robust-stack": {
+      "enabled": true,
+      "severity": "warn",
+      "params": {},
+      "ignore": []
+    },
     "modules-small": {
       "enabled": true,
       "severity": "block",

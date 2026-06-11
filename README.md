@@ -28,7 +28,7 @@ An AI coding assistant is like a brilliant intern with infinite energy and **zer
 
 ## What it does — in plain words
 
-1. **It teaches your AI the rules** that the world's best software engineers live by. Small focused files. No secrets in code. No silent shortcuts. No security holes. Seven rules, written in plain language your AI reads before it writes anything.
+1. **It teaches your AI the rules** that the world's best software engineers live by. Plan before you build. Pick proven tech, not hype. Small focused files. No secrets in code. No silent shortcuts. No security holes. Nine rules, written in plain language your AI reads before it writes anything.
 2. **It checks the work — and can't be sweet-talked.** Rules in a prompt are a polite request; the AI can ignore them. vibeguard also ships _checkers_ (we call them gates) that scan the actual code. Red is red, no matter how confident the AI sounds.
 3. **It catches destruction before you do.** With its companion engine [driftguard](https://github.com/Tri1075/driftguard), vibeguard takes a snapshot of what works _before_ the AI starts. When the AI finishes, it compares: anything that used to work and is now broken gets the AI **blocked and sent back to fix it** — then _you_ approve or reject what's left, with one click.
 
@@ -52,23 +52,27 @@ That's exactly who this is for. Here's everything you need to know:
 
 You never have to read the code to know whether it's healthy. That's the point.
 
-## The 7 rules (in human words)
+## The 9 rules (in human words)
 
 | #   | Rule                     | In plain words                                                                                                  |
 | --- | ------------------------ | --------------------------------------------------------------------------------------------------------------- |
-| 1   | **Small files**          | Every file does one job, under 200 lines of code. Big files are where bugs hide.                                |
-| 2   | **No hidden shortcuts**  | If the AI wants to take a shortcut (a "hack"), it must **warn you first** and write it in a ledger you control. |
-| 3   | **No surprise packages** | The AI can't add new dependencies without your approval.                                                        |
-| 4   | **No secrets in code**   | Passwords and API keys never go in the code. Ever.                                                              |
-| 5   | **No security holes**    | The classic mistakes that get apps hacked — blocked before they ship.                                           |
-| 6   | **No dead code**         | No commented-out leftovers, no unused exports. Clean house.                                                     |
-| 7   | **No swallowed errors**  | When something fails, you hear about it — errors never vanish silently.                                         |
+| 1   | **Plan first**           | A real project starts with a robust plan — goal, milestones, risks — not with the first file the AI feels like writing. |
+| 2   | **Robust stack**         | The AI researches the most solid technology for the job and writes down why. Boring and proven beats shiny and new. |
+| 3   | **Small files**          | Every file does one job, under 200 lines of code. Big files are where bugs hide.                                |
+| 4   | **No hidden shortcuts**  | If the AI wants to take a shortcut (a "hack"), it must **warn you first** and write it in a ledger you control. |
+| 5   | **No surprise packages** | The AI can't add new dependencies without your approval.                                                        |
+| 6   | **No secrets in code**   | Passwords and API keys never go in the code. Ever.                                                              |
+| 7   | **No security holes**    | The classic mistakes that get apps hacked — blocked before they ship.                                           |
+| 8   | **No dead code**         | No commented-out leftovers, no unused exports. Clean house.                                                     |
+| 9   | **No swallowed errors**  | When something fails, you hear about it — errors never vanish silently.                                         |
+
+**Bonus — "grill me".** Got a plan but not sure it holds? Say *"grill me"* and your AI interviews you about every branch of it, one question at a time, until you both actually agree on what you're building. (Ships as a second skill on Claude Code.)
 
 Every rule is yours to tune. Experienced engineers can edit any rule, raise any limit, disable anything — the AI never can. That line is enforced by the engine, not by trust.
 
 ## We eat our own cooking
 
-vibeguard obeys its own seven rules and checks itself in CI on every commit. Its companion driftguard was our first "customer": the gates found six oversized modules and seven pieces of dead code in it — and the AI that maintains it was made to fix every one. **If we won't live by these rules, why would you?**
+vibeguard obeys its own nine rules and checks itself in CI on every commit. Its companion driftguard was our first "customer": the gates found six oversized modules and seven pieces of dead code in it — and the AI that maintains it was made to fix every one. **If we won't live by these rules, why would you?**
 
 ---
 
@@ -83,7 +87,7 @@ vibeguard obeys its own seven rules and checks itself in CI on every commit. Its
 
 **Session discipline.** LLM attention degrades as context fills (the "dumb zone"). The law mandates a warning at 100K tokens and a handoff at 120K: `vibeguard handoff` writes `HANDOFF.md`; driftguard carries scope and baseline across the fresh session. `vibeguard tokens` names your zone.
 
-**Token economy.** `vibeguard run` chains [headroom](https://github.com/chopratejas/headroom) when installed.
+**Token economy.** `vibeguard run` chains [headroom](https://github.com/chopratejas/headroom) when installed. And vibeguard polices itself: every artifact it injects into your agent's context (rules skill, protocol block, handoff template) has a token budget locked by the test suite — your context is spent on your code, not on our prose.
 
 **Owner-only customization.** `.vibeguard/rules.json` (enable/disable, severity `block|warn`, params, per-rule ignores) + editable `instructions/*.md` + `debt.md` ledger + `deps-baseline.json`. Inline `// vibeguard-allow` pragmas for vetted false positives.
 
@@ -117,7 +121,7 @@ vibeguard wants to become **the world's reference for clean AI-assisted code** �
 
 ## Roadmap
 
-- ✅ The 7 rules, law + police · session wrapper · 120K handoff · driftguard enforcement · GitHub Action
+- ✅ The 9 rules, law + police · session wrapper · 120K handoff · driftguard enforcement · GitHub Action · plan-interview skill · locked token budgets
 - ⏳ True AST gates (function length, floating promises) · more languages · VS Code surface · public launch
 
 ## License

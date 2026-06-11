@@ -1,7 +1,8 @@
 /**
- * The seven laws — the imperative rule texts every LLM must follow. Single
+ * The nine laws — the imperative rule texts every LLM must follow. Single
  * source of truth: written to .vibeguard/instructions/<id>.md at init (owner-
- * editable) and compiled into the host skill/AGENTS.md. Kept terse on purpose.
+ * editable) and compiled into the host skill/AGENTS.md. Kept terse on purpose:
+ * every word here is paid in tokens at the start of each agent session.
  */
 
 export interface Law {
@@ -11,6 +12,16 @@ export interface Law {
 }
 
 export const LAWS: Law[] = [
+  {
+    id: 'plan-first',
+    title: 'Plan before you build',
+    body: 'A project starts with a robust action plan, not code. Before the first implementation step, propose a plan and save it as PLAN.md: goal, ordered milestones, risks, and how each milestone is validated. Keep it current — when reality diverges, update the plan and say so; never drift from it silently.',
+  },
+  {
+    id: 'robust-stack',
+    title: 'Choose the most robust stack',
+    body: 'Before adopting a language, framework or major library, research the most robust option: maturity, maintenance, security track record, ecosystem. Prefer boring, proven technology over hype. Record the choice and the alternatives considered in STACK.md (or a "## Stack" section of PLAN.md) so the decision can be audited.',
+  },
   {
     id: 'modules-small',
     title: 'Small, single-purpose modules (≤ 200 lines)',

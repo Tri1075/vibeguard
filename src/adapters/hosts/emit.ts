@@ -5,6 +5,7 @@
  */
 import path from 'node:path';
 import { protocolMarkdown, skillMarkdown } from '../../laws/skill.js';
+import { interviewSkillMarkdown } from '../../laws/interview.js';
 import { writeFileAtomic } from '../../core/store.js';
 import type { HostId } from '../../core/hosts.js';
 import { upsertManagedBlock } from './agents-md.js';
@@ -12,9 +13,11 @@ import { upsertManagedBlock } from './agents-md.js';
 /** Write the host's rule artifact. Returns the relative paths written. */
 export async function emitHostArtifacts(root: string, host: HostId): Promise<string[]> {
   if (host === 'claude-code') {
-    const rel = '.claude/skills/vibeguard/SKILL.md';
-    await writeFileAtomic(path.join(root, rel), skillMarkdown());
-    return [rel];
+    const rules = '.claude/skills/vibeguard/SKILL.md';
+    const interview = '.claude/skills/vibeguard-plan-interview/SKILL.md';
+    await writeFileAtomic(path.join(root, rules), skillMarkdown());
+    await writeFileAtomic(path.join(root, interview), interviewSkillMarkdown());
+    return [rules, interview];
   }
   if (host === 'cursor') {
     const rel = '.cursor/rules/vibeguard.md';

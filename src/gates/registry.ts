@@ -4,6 +4,8 @@
  * because its detectors are heuristic (owner can promote it to `block`).
  */
 import type { Gate } from '../core/types.js';
+import { planFirst } from './plan-first.js';
+import { robustStack } from './robust-stack.js';
 import { modulesSmall } from './modules-small.js';
 import { noTechDebt } from './no-tech-debt.js';
 import { noSecrets } from './no-secrets.js';
@@ -14,6 +16,8 @@ import { errorHandling } from './error-handling.js';
 
 /** All gates, in display order. As of M3 every rule has its police. */
 export const GATES: Gate[] = [
+  planFirst,
+  robustStack,
   modulesSmall,
   noTechDebt,
   depsHygiene,
@@ -33,6 +37,8 @@ export interface RuleDefault {
 }
 
 export const RULE_DEFAULTS: RuleDefault[] = [
+  { id: 'plan-first', severity: 'warn', params: { minSections: 3, minLines: 15 }, hasGate: true },
+  { id: 'robust-stack', severity: 'warn', params: {}, hasGate: true },
   { id: 'modules-small', severity: 'block', params: { maxLines: 200, warnAt: 160 }, hasGate: true },
   {
     id: 'no-tech-debt',
