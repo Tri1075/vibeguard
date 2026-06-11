@@ -20,6 +20,42 @@
     "zod": {
       "version": "3.24.0",
       "manifest": "package.json"
+    },
+    "@eslint/js": {
+      "version": "10.0.1",
+      "manifest": "package.json"
+    },
+    "@types/node": {
+      "version": "22.15.0",
+      "manifest": "package.json"
+    },
+    "eslint": {
+      "version": "10.4.1",
+      "manifest": "package.json"
+    },
+    "eslint-config-prettier": {
+      "version": "10.1.8",
+      "manifest": "package.json"
+    },
+    "prettier": {
+      "version": "3.8.4",
+      "manifest": "package.json"
+    },
+    "tsup": {
+      "version": "8.4.0",
+      "manifest": "package.json"
+    },
+    "typescript": {
+      "version": "5.8.0",
+      "manifest": "package.json"
+    },
+    "typescript-eslint": {
+      "version": "8.61.0",
+      "manifest": "package.json"
+    },
+    "vitest": {
+      "version": "3.1.0",
+      "manifest": "package.json"
     }
   }
 }

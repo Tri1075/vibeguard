@@ -17,6 +17,7 @@ interface SecretRule {
 const SECRET_RULES: SecretRule[] = [
   { name: 'AWS access key', re: /\bAKIA[0-9A-Z]{16}\b/ },
   { name: 'GitHub token', re: /\bgh[pousr]_[A-Za-z0-9]{36,}\b/ },
+  { name: 'GitHub fine-grained PAT', re: /\bgithub_pat_[A-Za-z0-9_]{22,}\b/ },
   { name: 'OpenAI key', re: /\bsk-[A-Za-z0-9]{20,}\b/ },
   { name: 'Anthropic key', re: /\bsk-ant-[A-Za-z0-9-]{20,}\b/ },
   { name: 'Google API key', re: /\bAIza[0-9A-Za-z_-]{35}\b/ },
@@ -28,6 +29,16 @@ const SECRET_RULES: SecretRule[] = [
 // Generic "secret-ish assignment": a credential-named field set to a long literal.
 const GENERIC =
   /\b(secret|password|passwd|token|api[_-]?key|access[_-]?key|private[_-]?key)\b\s*[:=]\s*['"][^'"]{12,}['"]/i;
+// Env-style UNQUOTED assignment (`DB_PASSWORD=hunter2hunter2x`) — .env values
+// are rarely quoted, so the GENERIC (quote-requiring) rule misses them. No
+// leading \b: the credential word is usually glued to the key by `_`
+// (DB_PASSWORD), where `_` is a word char and would suppress the boundary.
+const ENV_GENERIC =
+  /(secret|password|passwd|token|api[_-]?key|access[_-]?key|private[_-]?key)[\w-]*\s*=\s*(\S{12,})\s*$/i;
+const SCAN_EXT = /\.(json|ya?ml|toml|ini|cfg)$/;
+// .env, .env.local, .env.production … but NOT placeholder templates.
+const ENV_FILE = /(^|\/)\.env(\.[\w-]+)?$/;
+const ENV_TEMPLATE = /\.env\.(example|sample|template|dist|defaults?)$/i;
 const PRAGMA = /vibeguard-allow/;
 
 export const noSecrets: Gate = {
@@ -41,14 +52,17 @@ export const noSecrets: Gate = {
 async function analyse(ctx: GateContext): Promise<Finding[]> {
   const findings: Finding[] = [];
   for (const file of ctx.files) {
-    if (!isCodeFile(file) && !/\.(json|ya?ml|env|toml|ini|cfg)$/.test(file)) continue;
+    const isEnv = ENV_FILE.test(file) && !ENV_TEMPLATE.test(file);
+    if (!isCodeFile(file) && !SCAN_EXT.test(file) && !isEnv) continue;
     const source = await ctx.readText(file);
     if (source === null) continue;
     source.split('\n').forEach((raw, i) => {
       if (PRAGMA.test(raw)) return;
       const hit = SECRET_RULES.find((r) => r.re.test(raw));
       const generic = !hit && GENERIC.test(raw) && hasHighEntropyLiteral(raw);
-      if (!hit && !generic) return;
+      // In a real .env, a credential-named key with a long unquoted value is a leak.
+      const envHit = !hit && !generic && isEnv && ENV_GENERIC.test(raw);
+      if (!hit && !generic && !envHit) return;
       findings.push({
         rule: 'no-secrets',
         severity: 'critical',

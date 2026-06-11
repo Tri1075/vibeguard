@@ -16,14 +16,20 @@ export async function parseManifestDeps(ctx: GateContext): Promise<DepMap> {
 
 function parsePackageJson(text: string | null): DepMap {
   if (!text) return {};
-  let json: { dependencies?: Record<string, string>; optionalDependencies?: Record<string, string> };
+  // devDependencies count: they still run install scripts (the real
+  // supply-chain vector), so an unapproved dev dep must trip the gate too.
+  let json: {
+    dependencies?: Record<string, string>;
+    optionalDependencies?: Record<string, string>;
+    devDependencies?: Record<string, string>;
+  };
   try {
     json = JSON.parse(text) as typeof json;
   } catch {
     return {};
   }
   const out: DepMap = {};
-  for (const block of [json.dependencies, json.optionalDependencies]) {
+  for (const block of [json.dependencies, json.optionalDependencies, json.devDependencies]) {
     for (const [name, version] of Object.entries(block ?? {})) {
       out[name] = { version: cleanRange(version), manifest: 'package.json' };
     }

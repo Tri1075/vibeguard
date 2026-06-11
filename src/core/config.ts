@@ -28,8 +28,14 @@ export async function loadConfig(root: string): Promise<LoadedConfig> {
   const paths = pathsFor(root);
   const raw = await readJson<unknown>(paths.rulesFile);
   const parsed = RulesFileSchema.safeParse(raw ?? { schemaVersion: 1 });
-  const rules: RulesFile = parsed.success ? parsed.data : RulesFileSchema.parse({ schemaVersion: 1 });
-  return { rules, resolved: resolveRules(rules), paths };
+  if (!parsed.success) {
+    // The owner's control panel: never silently discard it for defaults. A
+    // valid-JSON-but-schema-invalid rules.json (typo'd severity, wrong
+    // schemaVersion) would otherwise re-enable disabled gates with no signal.
+    const issues = parsed.error.issues.map((i) => `${i.path.join('.') || '(root)'}: ${i.message}`).join('; ');
+    throw new Error(`invalid .vibeguard/rules.json — ${issues}. Fix it or delete it to restore defaults.`);
+  }
+  return { rules: parsed.data, resolved: resolveRules(parsed.data), paths };
 }
 
 /** Merge each rule's defaults with the owner's rules.json overrides. */

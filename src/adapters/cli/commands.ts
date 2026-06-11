@@ -6,6 +6,7 @@ import { listProjectFiles, makeReadText } from '../../core/files.js';
 import { parseManifestDeps } from '../../core/deps-parse.js';
 import { readDepsBaseline, writeDepsBaseline } from '../../core/deps-baseline.js';
 import { runCheck } from '../../core/runner.js';
+import { GATES } from '../../gates/registry.js';
 import { writeFileAtomic } from '../../core/store.js';
 import { pathsFor } from '../../core/paths.js';
 import { protocolMarkdown, skillMarkdown } from '../../laws/skill.js';
@@ -35,6 +36,14 @@ export async function checkCommand(
   rule: string | undefined,
   opts: { json?: boolean; ci?: boolean },
 ): Promise<never> {
+  if (rule !== undefined && !GATES.some((g) => g.id === rule)) {
+    // A typo'd rule used to filter to zero gates and exit 0 ("clean") — a CI
+    // probe could pass forever on a misspelled name. Fail loudly instead.
+    process.stderr.write(
+      `${pc.red('unknown rule:')} "${rule}" — known rules: ${GATES.map((g) => g.id).join(', ')}\n`,
+    );
+    process.exit(2);
+  }
   const config = await loadConfig(mustRoot(cwd));
   const report = await runCheck(config, rule ? { only: [rule] } : {});
   process.stdout.write(opts.json || opts.ci ? renderJson(report) : `${renderTty(report, useColor())}\n`);
@@ -67,12 +76,14 @@ export function rulesCommand(opts: { skill?: boolean }): void {
 }
 
 function pick<T>(map: Record<string, T>, key: string): Record<string, T> {
-  const v = map[key] ?? map[key.toLowerCase()];
-  if (!v) {
+  // Store under the key that actually matched (Python deps are lowercased in
+  // parsing), so `deps approve Flask` approves `flask` — the key the gate sees.
+  const matchedKey = key in map ? key : key.toLowerCase() in map ? key.toLowerCase() : null;
+  if (matchedKey === null) {
     process.stderr.write(`${pc.red('not a current dependency:')} ${key}\n`);
     process.exit(2);
   }
-  return { [key]: v };
+  return { [matchedKey]: map[matchedKey] as T };
 }
 
 async function readOr(file: string, fallback: string): Promise<string> {

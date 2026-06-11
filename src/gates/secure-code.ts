@@ -8,6 +8,7 @@
  */
 import type { Finding, Gate, GateContext, Severity } from '../core/types.js';
 import { isCodeFile } from '../core/langs.js';
+import { classifyLines } from '../core/comments.js';
 
 interface SecurityPattern {
   name: string;
@@ -18,14 +19,16 @@ interface SecurityPattern {
 
 const PATTERNS: SecurityPattern[] = [
   {
+    // Word-start (not `.eval`) so method calls like model.eval()/df.eval() don't fire.
     name: 'dynamic code execution (eval / new Function)',
-    re: /\beval\s*\(|\bnew\s+Function\s*\(/,
+    re: /(?<![.\w])eval\s*\(|\bnew\s+Function\s*\(/,
     severity: 'high',
     fix: 'Avoid eval/new Function. Parse data explicitly or use a safe dispatch table.',
   },
   {
+    // Word-start so RegExp.prototype.exec (re.exec(s + x)) isn't flagged.
     name: 'shell exec with interpolation',
-    re: /\b(exec|execSync|spawn|system|popen)\s*\([^)]*[`$+]/,
+    re: /(?<![.\w])(exec|execSync|spawn|system|popen)\s*\([^)]*[`$+]/,
     severity: 'high',
     fix: 'Pass arguments as an array, never a concatenated string. Avoid shell:true with user input.',
   },
@@ -36,8 +39,11 @@ const PATTERNS: SecurityPattern[] = [
     fix: 'Use a list of args and shell=False; never interpolate user input into a shell string.',
   },
   {
+    // The SQL keyword must sit INSIDE a string literal (opening quote, keyword,
+    // more content, closing quote) before the `+`, so `delete cache['a'+k]` and
+    // `store.update('x' + y)` no longer trip a "SQL concatenation" finding.
     name: 'SQL built by string concatenation',
-    re: /\b(SELECT|INSERT|UPDATE|DELETE)\b[^;]*['"`]\s*\+|\bexecute\s*\(\s*[`'"][^`'"]*\$\{/i,
+    re: /['"`][^'"`]*\b(?:SELECT|INSERT|UPDATE|DELETE)\b[^'"`]+['"`]\s*\+|\bexecute\s*\(\s*[`'"][^`'"]*\$\{/i,
     severity: 'high',
     fix: 'Use parameterized queries / prepared statements, never string concatenation.',
   },
@@ -55,9 +61,17 @@ const PATTERNS: SecurityPattern[] = [
   },
   {
     name: 'weak hash / cipher',
-    re: /\b(md5|sha1)\b|createCipher\b|\bDES\b|\bRC4\b/i,
+    re: /\b(?:md5|sha1)\b|createCipher\b/i,
     severity: 'medium',
     fix: 'Use SHA-256+/bcrypt/argon2 for passwords and AES-GCM for encryption.',
+  },
+  {
+    // Case-SENSITIVE: the bare `/i` form matched the French word "des" (and "rc4"
+    // substrings). Legacy cipher acronyms are always uppercase in real code.
+    name: 'weak cipher (DES / RC4)',
+    re: /\b(?:DES|RC4|3DES)\b/,
+    severity: 'medium',
+    fix: 'Use AES-GCM; DES/3DES/RC4 are broken.',
   },
   {
     name: 'permissive CORS',
@@ -89,8 +103,10 @@ async function analyse(ctx: GateContext): Promise<Finding[]> {
     if (!isCodeFile(file)) continue;
     const source = await ctx.readText(file);
     if (source === null) continue;
+    const kinds = classifyLines(source);
     source.split('\n').forEach((raw, i) => {
       if (PRAGMA.test(raw)) return;
+      if (kinds[i]?.comment) return; // a vulnerability lives in code, not in prose
       for (const p of PATTERNS) {
         if (!p.re.test(raw)) continue;
         findings.push({

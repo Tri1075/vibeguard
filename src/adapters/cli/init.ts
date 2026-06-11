@@ -34,8 +34,11 @@ export async function initCommand(cwd: string, opts: InitOptions): Promise<void>
   for (const law of LAWS) {
     await writeFileAtomic(`${paths.instructionsDir}/${law.id}.md`, instructionDoc(law, profile));
   }
-  await writeFileAtomic(paths.debtFile, debtLedgerHeader());
-  await seedDepsBaseline(root, paths);
+  // --force re-scaffolds, but the debt ledger and deps baseline are accrued
+  // human decisions: clobbering them would silently erase approvals (and
+  // blanket-approve whatever deps are declared right now). Preserve both.
+  if (!fs.existsSync(paths.debtFile)) await writeFileAtomic(paths.debtFile, debtLedgerHeader());
+  if (!fs.existsSync(paths.depsBaselineFile)) await seedDepsBaseline(root, paths);
   const linked = await registerWithDriftguard(root);
 
   process.stdout.write(
