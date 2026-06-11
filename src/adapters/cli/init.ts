@@ -12,12 +12,14 @@ import { writeDepsBaseline } from '../../core/deps-baseline.js';
 import { writeFileAtomic, writeJsonAtomic } from '../../core/store.js';
 import { LAWS } from '../../laws/texts.js';
 import { RULE_DEFAULTS } from '../../gates/registry.js';
+import { postureForProfile, severityUnder, type Posture } from '../../gates/postures.js';
 import { listProjectFiles, makeReadText } from '../../core/files.js';
 import { registerWithDriftguard } from './driftguard-link.js';
 import type { GateContext } from '../../core/types.js';
 
 export interface InitOptions {
   profile?: 'beginner' | 'experienced';
+  posture?: Posture;
   force?: boolean;
 }
 
@@ -29,8 +31,10 @@ export async function initCommand(cwd: string, opts: InitOptions): Promise<void>
     return;
   }
   const profile = opts.profile ?? (await askProfile());
+  // The engineer dial: experienced → guardian (lean), beginner → strict (full).
+  const posture = opts.posture ?? postureForProfile(profile);
 
-  await writeJsonAtomic(paths.rulesFile, defaultRulesFile(profile));
+  await writeJsonAtomic(paths.rulesFile, defaultRulesFile(profile, posture));
   for (const law of LAWS) {
     await writeFileAtomic(`${paths.instructionsDir}/${law.id}.md`, instructionDoc(law, profile));
   }
@@ -42,7 +46,7 @@ export async function initCommand(cwd: string, opts: InitOptions): Promise<void>
   const linked = await registerWithDriftguard(root);
 
   process.stdout.write(
-    `${pc.green('✓ vibeguard initialized')} (profile: ${profile})\n` +
+    `${pc.green('✓ vibeguard initialized')} (level: ${profile}, posture: ${posture}${posture === 'guardian' ? ' — blocks the AI’s dangerous moves, advises on style' : ' — full clean-code bar'})\n` +
       `  ${LAWS.length} rules written to .vibeguard/instructions/ (yours to edit)\n` +
       `  ${linked ? 'registered as driftguard probes + protected .vibeguard/' : 'driftguard not found — gates run via `vibeguard check` and CI'}\n`,
   );
@@ -74,13 +78,14 @@ function printNextSteps(profile: 'beginner' | 'experienced'): void {
   }
 }
 
-function defaultRulesFile(profile: 'beginner' | 'experienced'): unknown {
+function defaultRulesFile(profile: 'beginner' | 'experienced', posture: Posture): unknown {
   const rules: Record<string, unknown> = {};
   for (const def of RULE_DEFAULTS) {
-    // Beginners start AST-pending rules as warn; experienced keep defaults.
-    rules[def.id] = { enabled: true, severity: def.severity, params: def.params, ignore: [] };
+    // The posture decides what blocks vs advises; all rules stay enabled.
+    const severity = severityUnder(posture, def.id, def.severity);
+    rules[def.id] = { enabled: true, severity, params: def.params, ignore: [] };
   }
-  return { schemaVersion: 1, profile, ignore: ['*.min.js', '*.lock', 'vendor/**'], rules };
+  return { schemaVersion: 1, profile, posture, ignore: ['*.min.js', '*.lock', 'vendor/**'], rules };
 }
 
 function instructionDoc(law: { id: string; title: string; body: string }, profile: string): string {

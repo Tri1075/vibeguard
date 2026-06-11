@@ -95,6 +95,12 @@ Several are inspired by [Matt Pocock's skills](https://github.com/mattpocock/ski
 
 ## For engineers
 
+> Worried it'll babysit you? It won't. It polices the AI, not you.
+
+**Two postures — pick your bar.** The default for an experienced engineer is `guardian`: it _blocks_ the AI's genuinely dangerous moves — hardcoded secrets, insecure code, swallowed errors, unapproved dependencies — and only _advises_ on style (module size, debt markers). Your existing 250-line file and your deliberate `// TODO` are never blocked. Flip to `strict` (`vibeguard init --posture strict`, the beginner default) for the full clean-code bar. Every rule's severity, params, and ignores live in `.vibeguard/rules.json` — **you own it, the agent may never touch it.** You tune everything; it tunes nothing.
+
+**Proportional, never ceremonial.** A typo fix just gets done. On a real task the agent _offers_ the choice — "just build it, or grill you on the design first?" — instead of forcing a plan ritual or skipping the thinking. The framing scales to the task, and you decide.
+
 **Law + police, always paired.** Each rule ships as (a) an imperative rule text emitted into the host's native format — Claude Code skill, `.cursor/rules`, or a managed `AGENTS.md` block — and (b) a deterministic gate (`vibeguard check <rule>`, exit 0/1, stable `--json` for CI). The law now includes a **"No excuses" block**: the agent's favorite rationalizations, pre-refuted.
 
 **Enforcement via [driftguard](https://github.com/Tri1075/driftguard).** `init` registers every gate as a driftguard probe and protects `.vibeguard/**`. A gate going green→red mid-session is a _regression_: the agent is blocked at end-of-turn, ordered to self-correct (repair → selective revert → justify), and you arbitrate the rest in a local dashboard. Recurring drift becomes a proposed CLAUDE.md rule via `driftguard patterns --apply`.

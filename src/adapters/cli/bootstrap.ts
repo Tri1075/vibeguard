@@ -35,8 +35,12 @@ export async function bootstrapCommand(cwd: string, opts: BootstrapOptions): Pro
 
   const hadDrift = fs.existsSync(path.join(root, '.driftguard', 'config.json'));
 
-  // 1. vibeguard rules (safe defaults, non-interactive).
-  if (!fs.existsSync(paths.rulesFile)) await initCommand(root, { profile: 'experienced' });
+  // 1. vibeguard rules (non-interactive). Experienced + guardian by default:
+  // an engineer's first impression should catch the AI's dangerous moves, not
+  // nag their style. They can re-init with --profile/--posture to change it.
+  if (!fs.existsSync(paths.rulesFile)) {
+    await initCommand(root, { profile: 'experienced', posture: 'guardian' });
+  }
 
   // 2-4. driftguard: config, gate probes, baseline. Only when the engine exists.
   if (driftAvailable) {

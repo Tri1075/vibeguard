@@ -23,10 +23,17 @@ export async function runCli(argv: string[]): Promise<void> {
     .command('init')
     .description('scaffold .vibeguard/, write the rules, register with driftguard')
     .option('--profile <level>', 'beginner | experienced (skips the prompt)')
+    .option('--posture <posture>', 'guardian (lean: block the dangerous, advise on style) | strict (full)')
     .option('--force', 'overwrite an existing setup')
-    .action(async (opts: { profile?: 'beginner' | 'experienced'; force?: boolean }) => {
-      await initCommand(cwd(), opts);
-    });
+    .action(
+      async (opts: {
+        profile?: 'beginner' | 'experienced';
+        posture?: 'guardian' | 'strict';
+        force?: boolean;
+      }) => {
+        await initCommand(cwd(), opts);
+      },
+    );
 
   program
     .command('bootstrap')

@@ -8,6 +8,24 @@ All notable changes to vibeguard-pack are documented here. The format follows
 
 ### Added
 
+- **M14 — two dials + engineer positioning.** Adoption hinges on engineers not
+  feeling babysat, so the tool now scales to both the person and the task.
+  _Posture_ (`vibeguard init --posture guardian|strict`, also a `posture` field
+  in `rules.json`) decides what blocks vs what merely advises: `guardian` (the
+  experienced default) blocks the AI's dangerous moves — secrets, insecure code,
+  swallowed errors, unapproved deps — and relaxes the two style-nag rules
+  (module size, debt markers) to advisory, so a brownfield 250-line file or a
+  deliberate `// TODO` is never blocked; `strict` (the beginner default) keeps
+  the full clean-code bar. The emitted law gained a "Working with the user
+  (scale to the task)" clause: a trivial change just gets done, a substantial
+  one starts with a plan, and the agent _offers_ the choice ("just build it, or
+  grill you on the design first?") instead of forcing or skipping it. The
+  README's "For engineers" section now leads with "it polices the AI, not you,"
+  the two postures, and "you own `rules.json`, the agent may never touch it."
+  `bootstrap` defaults a fresh project to experienced + guardian so an engineer's
+  first impression catches real risk without nagging their style. New
+  `src/gates/postures.ts`, covered by `test/unit/postures.test.ts`.
+
 - **M13 — demo.** `demo/run-demo.sh` runs the real loop on a throwaway project
   (govern → drift → block with the decision grammar → self-correct →
   patterns→CLAUDE.md) and `demo/demo.tape` renders it to a GIF with vhs.

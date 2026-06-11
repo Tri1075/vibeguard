@@ -19,6 +19,8 @@ export const RulesFileSchema = z.object({
   schemaVersion: z.literal(1),
   /** beginner | experienced — drives onboarding guidance, not protection */
   profile: z.enum(['beginner', 'experienced']).default('beginner'),
+  /** enforcement posture this file was generated from (informational) */
+  posture: z.enum(['guardian', 'strict']).optional(),
   /** project-wide ignore globs applied to every gate */
   ignore: z.array(z.string()).default([]),
   /** per-rule config, keyed by rule id; absent rules fall back to defaults */
