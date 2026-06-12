@@ -90,6 +90,8 @@ npx vibeguard review          # arbitrate what the guard caught (or: ui)
 
 Never written code before? Type `npx vibeguard`, answer **beginner**, and `vibeguard check` will always tell you in plain English whether your code is healthy — and how to fix it when it isn't.
 
+> **Platforms**: developed and CI-tested on macOS and Linux (Node ≥ 20). Windows is untested — reports and fixes are very welcome.
+
 ### Pick your dose
 
 The full loop is the point — but every half works on its own, with commands that already exist:
