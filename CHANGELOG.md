@@ -8,6 +8,14 @@ All notable changes to vibeguard are documented here. The format follows
 
 ### Added
 
+- **Perf — one disk read per file, shared by all gates.** Every content gate
+  used to read and decode the same tree independently; `runCheck` now hands
+  gates a per-run cached reader (`makeCachedReadText`). Measured end to end
+  (process spawn included, median of 7): 2000-file repo 1228 → 502 ms (×2.4);
+  this repo 205 → 181 ms; driftguard 233 → 199 ms — the gain grows with repo
+  size. Reproducible: `node scripts/bench-check.mjs <dir> --synth 2000`.
+  The cache never outlives a run, so a new check always sees fresh edits.
+
 - **M15a — the zero-friction plugin, made real.** M11 built the plugin
   foundation but it had never run in a real session and the bundled binaries
   were gitignored. A new reproducible smoke (`scripts/smoke-plugin.sh`) drives

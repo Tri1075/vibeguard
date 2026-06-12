@@ -73,3 +73,22 @@ export function makeReadText(root: string): (rel: string) => Promise<string | nu
     }
   };
 }
+
+/**
+ * Same contract, read-once: every content gate scans the same tree, so one
+ * check used to read and decode each file once PER GATE. The cache makes it
+ * once per check. Scoped to a single runCheck — never reused across checks,
+ * so a later check always sees fresh edits.
+ */
+export function makeCachedReadText(root: string): (rel: string) => Promise<string | null> {
+  const read = makeReadText(root);
+  const cache = new Map<string, Promise<string | null>>();
+  return (rel: string): Promise<string | null> => {
+    let hit = cache.get(rel);
+    if (!hit) {
+      hit = read(rel);
+      cache.set(rel, hit);
+    }
+    return hit;
+  };
+}

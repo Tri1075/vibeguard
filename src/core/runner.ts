@@ -5,7 +5,7 @@
 import ignoreFactory from 'ignore';
 import { GATES } from '../gates/registry.js';
 import type { LoadedConfig } from './config.js';
-import { listProjectFiles, makeReadText } from './files.js';
+import { listProjectFiles, makeCachedReadText } from './files.js';
 import type { Finding, GateContext } from './types.js';
 
 export interface CheckReport {
@@ -25,7 +25,7 @@ export interface RunOptions {
 export async function runCheck(config: LoadedConfig, opts: RunOptions = {}): Promise<CheckReport> {
   const root = config.paths.root;
   const allFiles = await listProjectFiles(root);
-  const readText = makeReadText(root);
+  const readText = makeCachedReadText(root); // one disk read + decode per file, shared by all gates
   const findings: Finding[] = [];
   const ran: string[] = [];
   let blocked = false;
