@@ -46,6 +46,23 @@ Most tools that try to make AI write better code do one of these things. vibegua
 
 Prompt rules _ask_ the AI nicely — and it rationalizes around them. Linters check your syntax, brilliantly, but they don't govern what the agent _does_ or stop it mid-session. Skill collections (like the excellent [agent-skills](https://github.com/addyosmani/agent-skills)) teach great workflows, but nothing checks the agent actually followed them. vibeguard pairs every rule with a deterministic gate, blocks the agent at the end of its turn until it self-corrects, and promotes each recurring mistake into a rule it won't repeat. **It doesn't replace your linter — it governs the AI that writes the code your linter checks.**
 
+## The gold-standard stack
+
+vibeguard is one quarter of a stack that gives any vibecoder — and any coding agent — gold-standard engineering with measurable time and token savings, one tool per stage of the loop:
+
+| Stage              | Tool                                                   | What it saves                                                                                                                    |
+| ------------------ | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| **Read less**      | [codegraph](https://github.com/colbymchenry/codegraph) | a pre-indexed code knowledge graph: the agent queries structure instead of grepping files — fewer tokens, fewer tool calls       |
+| **Carry less**     | [headroom](https://github.com/chopratejas/headroom)    | context compression on LLM-bound payloads (already chained by `vibeguard run`) — the same session fits in fewer tokens           |
+| **Redo less**      | **vibeguard**                                          | the rules are stated once and _checked_ every turn — mistakes are caught at the turn boundary, not three features later          |
+| **Re-review less** | [driftguard](https://github.com/Tri1075/driftguard)    | scope enforcement + regression blocking + a decision grammar — you arbitrate concise change requests instead of re-reading diffs |
+
+Each stage compounds with the next: the agent reads only what matters, carries a compact context, gets stopped the moment a green check breaks, and hands you decisions instead of homework. Time saved at every stage; tokens saved at every stage.
+
+### Karpathy-aligned, and checkable
+
+Andrej Karpathy's viral coding-agent rules name four behaviors: **think before coding** (assumptions explicit, ask rather than guess), **simplicity first** (nothing speculative), **surgical changes** (touch only what you must), **goal-driven execution** (define success criteria, loop until verified). The vibeguard law states all four to the agent — and the stack makes the last two _mechanically checkable_: surgical changes **is** driftguard's scope contract (out-of-scope edits are blocked at the end of the turn), and goal-driven execution **is** the gate loop (every rule is a green/red probe; green→red blocks until self-corrected). Credit: [forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills) (MIT). The full lineage of every rule — the canon experienced engineers will recognize, from SRP to ADRs to the Twelve-Factor App — is in [docs/sources.md](docs/sources.md).
+
 ## Install
 
 One command on Claude Code, or one npm dependency for any other agent. Then it's invisible until something's wrong.

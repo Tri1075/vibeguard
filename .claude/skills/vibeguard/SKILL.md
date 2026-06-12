@@ -8,6 +8,17 @@ description: Essential engineering rules every change must follow — plan first
 Engineering rules for this project (vibeguard-pack). Apply them to every change. driftguard verifies
 and blocks drift; the session discipline below avoids the degraded end-of-context zone.
 
+## Working with the user (scale to the task)
+Match the ceremony to the work: a trivial change just gets done under the rules; a substantial or
+fuzzy one starts with a plan. OFFER the choice — "just build it, or grill you on the design first?"
+— never force or skip it. If the user says go, go; the rules still apply either way.
+Think before coding: state assumptions, ask rather than guess, surface tradeoffs.
+
+## Surgical & simple (Karpathy)
+Touch only what the task needs — never "improve" adjacent code (driftguard blocks out-of-scope
+edits). Minimum code that solves the problem: nothing speculative. Define success criteria, loop
+until they verify green.
+
 ## Session discipline (anti "dumb zone")
 At ~100K tokens: finish the current step, start nothing new. At 120K: STOP — write HANDOFF.md (state,
 decisions & why, files touched, next steps, traps, driftguard verdict) and ask the user for a fresh
@@ -44,6 +55,7 @@ Common rationalizations — all invalid:
 - "Input validation can come later" → later never comes. Secure now or warn now.
 - "I'll keep the old code commented out just in case" → git remembers. Delete it.
 - "This catch can stay empty, failure is unlikely" → unlikely failures are the ones that hurt. Handle or propagate.
+- "While I'm here, I'll clean this up too" → out of scope. Mention it, don't touch it.
 
 ## Enforcement
 `vibeguard check` runs these rules as driftguard probes: a rule going green→red is a REGRESSION that
