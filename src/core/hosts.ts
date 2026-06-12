@@ -39,9 +39,9 @@ export interface Host {
 /** Order matters: first match wins (e.g. `cursor-agent` before generic). */
 export const HOSTS: Host[] = [
   { id: 'claude-code', name: 'Claude Code', match: ['claude'], emit: 'claude-skill', live: 'in-session' },
-  { id: 'cursor', name: 'Cursor', match: ['cursor'], emit: 'cursor-rules', live: 'finish-line' },
+  { id: 'cursor', name: 'Cursor', match: ['cursor'], emit: 'cursor-rules', live: 'in-session' },
   { id: 'codex', name: 'OpenAI Codex CLI', match: ['codex'], emit: 'agents-md', live: 'finish-line' },
-  { id: 'opencode', name: 'OpenCode', match: ['opencode'], emit: 'agents-md', live: 'finish-line' },
+  { id: 'opencode', name: 'OpenCode', match: ['opencode'], emit: 'agents-md', live: 'in-session' },
   { id: 'hermes', name: 'Hermes Agent', match: ['hermes'], emit: 'agents-md', live: 'finish-line' },
   { id: 'gemini', name: 'Gemini CLI', match: ['gemini'], emit: 'agents-md', live: 'finish-line' },
   {
@@ -51,7 +51,7 @@ export const HOSTS: Host[] = [
     emit: 'agents-md',
     live: 'finish-line',
   },
-  { id: 'kiro', name: 'Kiro', match: ['kiro'], emit: 'agents-md', live: 'finish-line' },
+  { id: 'kiro', name: 'Kiro', match: ['kiro'], emit: 'agents-md', live: 'in-session' },
 ];
 
 const GENERIC: Host = {

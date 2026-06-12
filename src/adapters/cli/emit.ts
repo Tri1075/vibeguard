@@ -26,13 +26,10 @@ export async function emitCommand(cwd: string, hosts: string[], opts: EmitOption
     return;
   }
 
-  // Several AGENTS.md hosts share one managed block — emit each kind once.
+  // Writes are idempotent (AGENTS.md hosts share one managed block) and
+  // enforcement wiring is host-specific — emit per host, report the union.
   const written = new Set<string>();
-  const seen = new Set<string>();
-  for (const id of ids) {
-    const kind = hostById(id).emit;
-    if (seen.has(kind)) continue;
-    seen.add(kind);
+  for (const id of new Set(ids)) {
     for (const rel of await emitHostArtifacts(root, id)) written.add(rel);
   }
   process.stdout.write(`${pc.green('✓ rules emitted')} → ${[...written].join(', ')}\n`);
