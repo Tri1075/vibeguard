@@ -39,7 +39,19 @@ async function analyse(ctx: GateContext): Promise<Finding[]> {
   }
 
   const text = await ctx.readText(planFile);
-  if (text === null) return [];
+  if (text === null) {
+    // Listed but unreadable (deleted mid-run, binary, oversized): for this
+    // rule that IS a missing plan — never a silent pass.
+    return [
+      {
+        rule: 'plan-first',
+        severity: 'medium',
+        file: planFile,
+        message: 'the plan file cannot be read — building without a plan invites drift',
+        fix: `Restore a readable plan at ${planFile} (goal, ordered milestones, risks, validation per milestone).`,
+      },
+    ];
+  }
 
   const sections = countHeadings(text);
   const lines = countNonBlankLines(text);

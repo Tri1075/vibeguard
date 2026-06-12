@@ -8,6 +8,15 @@ All notable changes to vibeguard are documented here. The format follows
 
 ### Added
 
+- **Detection benchmark (docs/benchmarks.md).** 11 realistic seeded faults,
+  11/11 caught (9 blocking, 2 advisory-by-design), zero false positives on the
+  clean tree; reproducible via `node scripts/bench-detection.mjs` against the
+  bundled binaries. Writing it uncovered and fixed two real bugs: `check --ci`
+  truncated reports past 64KB (process.exit before stdout drained — now
+  `process.exitCode`), and tracked-but-deleted files were phantom entries in
+  the gates' file universe (a deleted PLAN.md passed silently — `git ls-files
+--deleted` is now subtracted, and an unreadable plan file is a missing plan).
+
 - **Perf — one disk read per file, shared by all gates.** Every content gate
   used to read and decode the same tree independently; `runCheck` now hands
   gates a per-run cached reader (`makeCachedReadText`). Measured end to end

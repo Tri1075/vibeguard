@@ -36,8 +36,19 @@ async function gitFiles(root: string): Promise<string[] | null> {
       cwd: root,
       reject: false,
     });
+    // Tracked-but-deleted files still show in `ls-files` — phantom entries
+    // that made a deleted PLAN.md look present to plan-first. The gates'
+    // universe is what EXISTS on disk.
+    const deleted = await execa('git', ['ls-files', '-z', '--deleted'], { cwd: root, reject: false });
+    const gone = new Set(
+      (deleted.exitCode === 0 ? deleted.stdout : '').split('\0').filter(Boolean).map(toPosix),
+    );
     const blob = `${tracked.stdout}\0${untracked.exitCode === 0 ? untracked.stdout : ''}`;
-    return blob.split('\0').filter(Boolean).map(toPosix);
+    return blob
+      .split('\0')
+      .filter(Boolean)
+      .map(toPosix)
+      .filter((f) => !gone.has(f));
   } catch {
     return null;
   }

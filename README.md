@@ -33,6 +33,8 @@ That last column is the part nobody else does: the guard doesn't just catch drif
 
 One command governs a throwaway project; the agent edits in scope and also drifts; the guard blocks the drift with a plain-English verdict; the agent self-corrects; and the recurring mistake becomes a standing rule. ([how it's recorded, anonymized](demo/))
 
+**Measured, not promised**: [the benchmarks](docs/benchmarks.md) seed 11 realistic AI-agent faults into a clean project — hardcoded key, swallowed error, surprise dependency, out-of-scope edit, broken green check, guard tampering… — and the stack catches **11/11 with zero false positives** on the untouched tree. Reproduce it yourself: `node scripts/bench-detection.mjs`.
+
 ## Why it's different
 
 Most tools that try to make AI write better code do one of these things. vibeguard is the only one that does all four:

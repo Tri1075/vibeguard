@@ -88,3 +88,33 @@ describe('vibeguard CLI', () => {
     expect(dg.probes.some((p: { name: string }) => p.name === 'vibeguard-secure-code')).toBe(true);
   });
 });
+
+describe('benchmark-uncovered regressions', () => {
+  it('check --ci emits COMPLETE JSON even on huge reports (no 64KB truncation)', async () => {
+    // 300 single-line exports → hundreds of findings → >64KB of JSON. A hard
+    // process.exit used to drop everything past the pipe buffer.
+    await vg(['init', '--profile', 'beginner']);
+    await fsp.mkdir(path.join(dir, 'src'), { recursive: true });
+    for (let i = 0; i < 6; i++) {
+      const big = Array.from({ length: 60 }, (_, j) => `export const v${i}_${j} = ${j};`).join('\n');
+      await fsp.writeFile(path.join(dir, `src/big${i}.ts`), big, 'utf8');
+    }
+    const res = await vg(['check', '--ci']);
+    const report = JSON.parse(String(res.stdout)) as { findings: unknown[] };
+    expect(report.findings.length).toBeGreaterThan(100);
+  });
+
+  it('a tracked-but-deleted plan is a MISSING plan, not a silent pass', async () => {
+    await vg(['init', '--profile', 'beginner']);
+    await fsp.writeFile(path.join(dir, 'PLAN.md'), '# Plan\n\n## Goal\nx\n\n## Stack\ny\n', 'utf8');
+    await execa('git', ['init', '-q'], { cwd: dir });
+    await execa('git', ['add', '-A'], { cwd: dir });
+    await execa('git', ['-c', 'user.email=t@e.c', '-c', 'user.name=t', 'commit', '-qm', 'i'], { cwd: dir });
+    await fsp.rm(path.join(dir, 'PLAN.md')); // deleted on disk, still tracked
+    const res = await vg(['check', 'plan-first', '--ci']);
+    const report = JSON.parse(String(res.stdout)) as { findings: { rule: string; message: string }[] };
+    expect(report.findings.some((f) => f.rule === 'plan-first' && /no action plan/.test(f.message))).toBe(
+      true,
+    );
+  });
+});

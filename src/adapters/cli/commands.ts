@@ -35,7 +35,7 @@ export async function checkCommand(
   cwd: string,
   rule: string | undefined,
   opts: { json?: boolean; ci?: boolean },
-): Promise<never> {
+): Promise<void> {
   if (rule !== undefined && !GATES.some((g) => g.id === rule)) {
     // A typo'd rule used to filter to zero gates and exit 0 ("clean") — a CI
     // probe could pass forever on a misspelled name. Fail loudly instead.
@@ -47,7 +47,9 @@ export async function checkCommand(
   const config = await loadConfig(mustRoot(cwd));
   const report = await runCheck(config, rule ? { only: [rule] } : {});
   process.stdout.write(opts.json || opts.ci ? renderJson(report) : `${renderTty(report, useColor())}\n`);
-  process.exit(report.blocked ? 1 : 0);
+  // exitCode, NOT process.exit(): a hard exit drops piped stdout past ~64KB,
+  // handing CI consumers truncated (invalid) JSON on large reports.
+  process.exitCode = report.blocked ? 1 : 0;
 }
 
 export async function debtAddCommand(cwd: string, file: string, opts: { reason: string }): Promise<void> {
