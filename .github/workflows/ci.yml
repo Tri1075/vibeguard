@@ -3,14 +3,26 @@ on:
   push:
     branches: [main]
   pull_request:
+  # macOS minutes bill at 10x the quota — the full cross-platform matrix burned
+  # ~93% of a month's free minutes in three days of pushes. Every push now runs
+  # ubuntu-only; the macOS matrix (which once caught a real macOS-only realpath
+  # bug in the plugin smoke) runs weekly and on demand instead of 10x-per-commit.
+  workflow_dispatch:
+  schedule:
+    - cron: '23 6 * * 1' # Mondays 06:23 UTC — weekly cross-platform coverage
+
+# Burst pushes supersede each other: cancel the stale run, keep the newest.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        node: [20, 22, 24]
+        node: [20, 24]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -25,11 +37,36 @@ jobs:
       - run: node dist/bin.js -C . check # dogfood: the pack passes its own gates
       # Prove the COMMITTED plugin binaries drive the whole hook lifecycle —
       # bootstrap → journal → Stop blocks a regression — which is exactly what
-      # `/plugin marketplace add` ships (clone, no build). Runs on every OS in
-      # the matrix: the binaries are platform-sensitive (a macOS-only realpath
-      # bug once slipped a false "tamper" past the unit tests).
+      # `/plugin marketplace add` ships (clone, no build).
       - run: bash scripts/smoke-plugin.sh
       # Plugin skills must match the TS source. `git diff` ignores untracked
       # files, so a NEW skill added in source but never committed would slip
       # through — stage first, then diff the index, to catch additions too.
+      - run: node scripts/emit-plugin.mjs && git add -A skills/ && git diff --cached --exit-code skills/
+
+  # ubuntu is covered on every push above — this leg buys the macOS axis only
+  # (1 job × 10x ≈ 15 quota-min/week instead of 10x on every commit).
+  cross-platform:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest]
+        node: [24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm test
+      - run: node dist/bin.js -C . check
+      # The binaries are platform-sensitive (a macOS-only realpath bug once
+      # slipped a false "tamper" past the unit tests) — this weekly leg is
+      # exactly where that class of bug gets caught.
+      - run: bash scripts/smoke-plugin.sh
       - run: node scripts/emit-plugin.mjs && git add -A skills/ && git diff --cached --exit-code skills/
