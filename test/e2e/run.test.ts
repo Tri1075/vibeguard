@@ -127,6 +127,50 @@ describe('vibeguard run — finish-line verdict (hosts without lifecycle hooks)'
   });
 });
 
+describe('vibeguard emit', () => {
+  it('writes the artifacts for the asked hosts, one AGENTS.md block for many hosts', async () => {
+    const res = await vg(['emit', 'cursor', 'kiro', 'codex']);
+    expect(res.exitCode).toBe(0);
+    const cursorRules = await fsp.readFile(path.join(dir, '.cursor/rules/vibeguard.md'), 'utf8');
+    expect(cursorRules).toContain('engineering rules (mandatory)');
+    const agents = await fsp.readFile(path.join(dir, 'AGENTS.md'), 'utf8');
+    expect(agents.match(/vibeguard:start/g)).toHaveLength(1); // kiro + codex share the block
+  });
+
+  it('--all emits every artifact kind, including the Claude skills', async () => {
+    const res = await vg(['emit', '--all']);
+    expect(res.exitCode).toBe(0);
+    await fsp.access(path.join(dir, '.claude/skills/vibeguard/SKILL.md'));
+    await fsp.access(path.join(dir, '.cursor/rules/vibeguard.md'));
+    await fsp.access(path.join(dir, 'AGENTS.md'));
+  });
+
+  it('with no argument, lists the supported hosts instead of writing anything', async () => {
+    const res = await vg(['emit']);
+    expect(res.exitCode).toBe(0);
+    for (const id of [
+      'claude-code',
+      'cursor',
+      'codex',
+      'opencode',
+      'hermes',
+      'gemini',
+      'antigravity',
+      'kiro',
+    ]) {
+      expect(String(res.stdout)).toContain(id);
+    }
+    await expect(fsp.access(path.join(dir, 'AGENTS.md'))).rejects.toThrow();
+  });
+
+  it('an unknown CLI name falls back to the AGENTS.md standard', async () => {
+    const res = await vg(['emit', 'some-future-agent']);
+    expect(res.exitCode).toBe(0);
+    const agents = await fsp.readFile(path.join(dir, 'AGENTS.md'), 'utf8');
+    expect(agents).toContain('vibeguard:start');
+  });
+});
+
 describe('vibeguard handoff & tokens', () => {
   it('handoff writes HANDOFF.md with prose placeholders', async () => {
     const res = await vg(['handoff']);
