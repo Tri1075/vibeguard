@@ -184,7 +184,7 @@ vibeguard obeys its own nine rules in CI on every commit, and **develops under i
 
 ## Built in the open
 
-MIT, and built to be extended. Adding a rule is a small, well-scoped job — a law, a gate, a registry entry, and tests ([CONTRIBUTING.md](CONTRIBUTING.md)) — so the rule set can grow with the community rather than with one maintainer. New rules, new languages, sharper gates, and bug reports are all genuinely welcome. The goal is a shared standard for clean AI-assisted code that belongs to everyone who relies on it.
+MIT, and built to be extended. Adding a rule is a small, well-scoped job — a law, a gate, a registry entry, and tests ([CONTRIBUTING.md](CONTRIBUTING.md)) — so the rule set can grow with the community rather than with one maintainer. New rules, new languages, sharper gates, and bug reports are all genuinely welcome. The goal is a shared standard for clean AI-assisted code that belongs to everyone who relies on it. Start with [ARCHITECTURE.md](ARCHITECTURE.md) — the full system map, the invariants, and where to plug in (driftguard has [its own](https://github.com/Tri1075/driftguard/blob/main/ARCHITECTURE.md)).
 
 If vibeguard ever catches something before it reaches your main branch, a ⭐ helps the next person find it — that's the only nudge you'll get here.
 
