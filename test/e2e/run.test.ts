@@ -78,6 +78,99 @@ describe('vibeguard run', () => {
   });
 });
 
+describe('vibeguard run — finish-line verdict (hosts without lifecycle hooks)', () => {
+  /** Stub driftguard whose `compare` exits with `compareExit` and leaves a marker. */
+  async function stubDriftguard(compareExit: number): Promise<string> {
+    const marker = path.join(dir, 'compare.ran');
+    await fsp.writeFile(
+      path.join(binDir, 'driftguard'),
+      `#!/bin/sh\nif [ "$1" = "compare" ]; then touch "${marker}"; exit ${compareExit}; fi\nexit 0\n`,
+      { mode: 0o755 },
+    );
+    await fsp.mkdir(path.join(dir, '.driftguard'), { recursive: true });
+    await fsp.writeFile(path.join(dir, '.driftguard', 'config.json'), '{}', 'utf8');
+    return marker;
+  }
+
+  posixOnly('a drifted session cannot exit 0 — the wrapper turns it red', async () => {
+    await stubCli('aider');
+    const marker = await stubDriftguard(1);
+    const res = await vg(['run', 'aider', '--no-headroom'], binDir);
+    expect(await fsp.readFile(marker, 'utf8')).toBeDefined(); // compare really ran
+    expect(res.exitCode).toBe(1);
+    expect(String(res.stderr)).toContain('drift detected');
+    expect(String(res.stderr)).toContain('YOUR decision');
+  });
+
+  posixOnly('a clean session keeps the agent exit code and says so', async () => {
+    await stubCli('aider');
+    await stubDriftguard(0);
+    const res = await vg(['run', 'aider', '--no-headroom'], binDir);
+    expect(res.exitCode).toBe(0);
+    expect(String(res.stdout)).toContain('no drift');
+  });
+
+  posixOnly('--no-verify skips the verdict entirely', async () => {
+    await stubCli('aider');
+    const marker = await stubDriftguard(1);
+    const res = await vg(['run', 'aider', '--no-headroom', '--no-verify'], binDir);
+    expect(res.exitCode).toBe(0); // drifted, but verification was explicitly skipped
+    await expect(fsp.access(marker)).rejects.toThrow(); // compare never ran
+  });
+
+  posixOnly('a driftguard tooling error never fails the session (fail-open)', async () => {
+    await stubCli('aider');
+    await stubDriftguard(2);
+    const res = await vg(['run', 'aider', '--no-headroom'], binDir);
+    expect(res.exitCode).toBe(0);
+    expect(String(res.stdout)).toContain('could not verify');
+  });
+});
+
+describe('vibeguard emit', () => {
+  it('writes the artifacts for the asked hosts, one AGENTS.md block for many hosts', async () => {
+    const res = await vg(['emit', 'cursor', 'kiro', 'codex']);
+    expect(res.exitCode).toBe(0);
+    const cursorRules = await fsp.readFile(path.join(dir, '.cursor/rules/vibeguard.md'), 'utf8');
+    expect(cursorRules).toContain('engineering rules (mandatory)');
+    const agents = await fsp.readFile(path.join(dir, 'AGENTS.md'), 'utf8');
+    expect(agents.match(/vibeguard:start/g)).toHaveLength(1); // kiro + codex share the block
+  });
+
+  it('--all emits every artifact kind, including the Claude skills', async () => {
+    const res = await vg(['emit', '--all']);
+    expect(res.exitCode).toBe(0);
+    await fsp.access(path.join(dir, '.claude/skills/vibeguard/SKILL.md'));
+    await fsp.access(path.join(dir, '.cursor/rules/vibeguard.md'));
+    await fsp.access(path.join(dir, 'AGENTS.md'));
+  });
+
+  it('with no argument, lists the supported hosts instead of writing anything', async () => {
+    const res = await vg(['emit']);
+    expect(res.exitCode).toBe(0);
+    for (const id of [
+      'claude-code',
+      'cursor',
+      'codex',
+      'opencode',
+      'hermes',
+      'gemini',
+      'antigravity',
+      'kiro',
+    ]) {
+      expect(String(res.stdout)).toContain(id);
+    }
+    await expect(fsp.access(path.join(dir, 'AGENTS.md'))).rejects.toThrow();
+  });
+
+  it('an unknown CLI name falls back to the AGENTS.md standard', async () => {
+    const res = await vg(['emit', 'some-future-agent']);
+    expect(res.exitCode).toBe(0);
+    const agents = await fsp.readFile(path.join(dir, 'AGENTS.md'), 'utf8');
+    expect(agents).toContain('vibeguard:start');
+  });
+});
+
 describe('vibeguard handoff & tokens', () => {
   it('handoff writes HANDOFF.md with prose placeholders', async () => {
     const res = await vg(['handoff']);

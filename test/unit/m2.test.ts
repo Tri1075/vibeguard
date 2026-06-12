@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { detectHost } from '../../src/core/hosts.js';
+import { detectHost, hostById, HOSTS } from '../../src/core/hosts.js';
 import { estimateTokens, zoneFor } from '../../src/core/tokens.js';
 import { buildHandoffDoc } from '../../src/core/handoff.js';
 
@@ -9,6 +9,25 @@ describe('host detection', () => {
     expect(detectHost('/usr/local/bin/claude')).toBe('claude-code');
     expect(detectHost('cursor')).toBe('cursor');
     expect(detectHost('aider')).toBe('generic');
+  });
+
+  it('knows all eight supported hosts, basename and case included', () => {
+    expect(detectHost('cursor-agent')).toBe('cursor');
+    expect(detectHost('codex')).toBe('codex');
+    expect(detectHost('opencode')).toBe('opencode');
+    expect(detectHost('hermes')).toBe('hermes');
+    expect(detectHost('/opt/google/gemini')).toBe('gemini');
+    expect(detectHost('Antigravity')).toBe('antigravity');
+    expect(detectHost('kiro')).toBe('kiro');
+  });
+
+  it('every named host has an emission kind and an enforcement level', () => {
+    for (const host of HOSTS) {
+      expect(['claude-skill', 'cursor-rules', 'agents-md']).toContain(host.emit);
+      expect(['in-session', 'finish-line']).toContain(host.live);
+    }
+    // Unknown CLIs still get the law via the AGENTS.md standard.
+    expect(hostById(detectHost('some-future-agent')).emit).toBe('agents-md');
   });
 });
 

@@ -2,6 +2,7 @@
 import { Command } from 'commander';
 import { TOOL_VERSION } from '../../version.js';
 import { initCommand } from './init.js';
+import { emitCommand } from './emit.js';
 import { runCommand } from './run.js';
 import { bootstrapCommand } from './bootstrap.js';
 import { handoffCommand, tokensCommand } from './session.js';
@@ -49,12 +50,31 @@ export async function runCli(argv: string[]): Promise<void> {
 
   program
     .command('run <cli> [args...]')
-    .description('prepare a governed session (emit rules, green-gate, headroom) then launch the agent CLI')
+    .description(
+      'prepare a governed session (emit rules, green-gate, headroom), launch the agent CLI, then run the driftguard finish-line verdict',
+    )
     .option('--force', 'start even if gates are red')
     .option('--no-headroom', 'do not wrap the CLI with headroom')
+    .option('--no-verify', 'skip the driftguard verdict when the agent exits')
     .allowUnknownOption(true)
-    .action(async (cli: string, args: string[] = [], opts: { force?: boolean; headroom?: boolean }) => {
-      await runCommand(cwd(), cli, args, opts);
+    .action(
+      async (
+        cli: string,
+        args: string[] = [],
+        opts: { force?: boolean; headroom?: boolean; verify?: boolean },
+      ) => {
+        await runCommand(cwd(), cli, args, opts);
+      },
+    );
+
+  program
+    .command('emit [hosts...]')
+    .description(
+      'write the rule artifacts for one or more hosts (cursor, kiro, antigravity, codex, gemini…) — for IDEs you do not launch via `run`',
+    )
+    .option('--all', 'emit every artifact kind (Claude skill, .cursor/rules, AGENTS.md block)')
+    .action(async (hosts: string[] = [], opts: { all?: boolean }) => {
+      await emitCommand(cwd(), hosts, opts);
     });
 
   program

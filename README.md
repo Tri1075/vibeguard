@@ -78,13 +78,33 @@ One command on Claude Code, or one npm dependency for any other agent. Then it's
 # portable — machine paths live in a gitignored overlay. Restarting the
 # session never launders an unresolved regression.
 
-# Any other agent (Cursor, Codex, Gemini, aider, local models…):
+# Any other agent (Cursor, Codex CLI, OpenCode, Hermes, Gemini CLI,
+# Antigravity, Kiro, aider, local models…):
 npm i -D vibeguard-pack
-npx vibeguard init          # one question: beginner or experienced?
-npx vibeguard run claude    # your session is now governed
+npx vibeguard init            # one question: beginner or experienced?
+npx vibeguard run codex       # CLI agents: governed session + exit verdict
+npx vibeguard emit cursor     # IDE agents: write their native rules file
 ```
 
 Never written code before? Run the three commands above, answer **beginner**, and `vibeguard check` will always tell you in plain English whether your code is healthy — and how to fix it when it isn't.
+
+## Deploy everywhere
+
+The same single-source law lands in each host's **native** rules location, and every host gets real enforcement — the honest difference is _when_ the police runs:
+
+| Host                 | The law (rules)                                          | The police (enforcement)                                                               |
+| -------------------- | -------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| **Claude Code**      | native plugin: skills + hooks + bundled binaries         | **in-session** — blocked at Stop the moment a green check breaks, self-correction loop |
+| **Cursor**           | `.cursor/rules/vibeguard.md` (`vibeguard emit cursor`)   | finish line — `vibeguard run cursor-agent` exit verdict, `vibeguard check` in CI       |
+| **OpenAI Codex CLI** | `AGENTS.md` managed block                                | finish line — `vibeguard run codex`                                                    |
+| **OpenCode**         | `AGENTS.md` managed block                                | finish line — `vibeguard run opencode`                                                 |
+| **Hermes Agent**     | `AGENTS.md` managed block                                | finish line — `vibeguard run hermes`                                                   |
+| **Gemini CLI**       | `AGENTS.md` managed block                                | finish line — `vibeguard run gemini`                                                   |
+| **Antigravity IDE**  | `AGENTS.md` managed block (`vibeguard emit antigravity`) | finish line — `vibeguard check` / CI gates                                             |
+| **Kiro**             | `AGENTS.md` managed block (`vibeguard emit kiro`)        | finish line — `vibeguard run kiro` (CLI) or `vibeguard check` / CI (IDE)               |
+| _anything else_      | `AGENTS.md` (the [open standard](https://agents.md/))    | finish line — `vibeguard run <your-cli>`                                               |
+
+**Finish line** means: `vibeguard run <cli>` refuses to start a session on red, lets the agent work without interference, then runs the **driftguard verdict when the agent exits** — out-of-scope edits and green→red regressions are reported as change requests for _your_ decision, and the wrapper exits non-zero so a script can't mistake a drifted session for a clean one. In-session blocking needs lifecycle hooks, which only some hosts expose: Cursor, Kiro and OpenCode have hook/plugin APIs — adapters for them are the next milestone, stated here so the matrix never overpromises.
 
 ## The 9 rules — each one is a law (the AI reads it) _and_ a police (a checker that can't be sweet-talked)
 
@@ -156,7 +176,7 @@ MIT, and built to be extended. Adding a rule is a small, well-scoped job — a l
 
 If vibeguard ever catches something before it reaches your main branch, a ⭐ helps the next person find it — that's the only nudge you'll get here.
 
-**Roadmap**: ✅ 9 rules law+police · wrapper · 120K handoff · driftguard enforcement · patterns→CLAUDE.md · plugin marketplace — ⏳ AST gates · more languages · public launch.
+**Roadmap**: ✅ 9 rules law+police · wrapper with exit verdict · 120K handoff · driftguard enforcement · patterns→CLAUDE.md · plugin marketplace · 8 hosts (law everywhere, finish-line police) — ⏳ in-session hooks for Cursor/Kiro/OpenCode · AST gates · more languages · public launch.
 
 ## License
 

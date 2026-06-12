@@ -20,6 +20,7 @@ const useColor = (): boolean => process.stdout.isTTY === true && !process.env['N
 export interface RunOptions {
   force?: boolean;
   headroom?: boolean; // commander sets false for --no-headroom
+  verify?: boolean; // commander sets false for --no-verify (skip the exit verdict)
 }
 
 export async function runCommand(
@@ -58,7 +59,51 @@ export async function runCommand(
   process.stdout.write(`${pc.green('✓ governed session starting')} → ${bin} ${args.join(' ')}\n`);
 
   const child = await execa(bin, args, { cwd: root, stdio: 'inherit', reject: false });
-  process.exit(exitCodeFor(child, bin));
+  const agentExit = exitCodeFor(child, bin);
+
+  // Finish-line verdict: hosts without lifecycle hooks (everything but the
+  // Claude Code plugin) get their enforcement HERE — the agent ran without
+  // interference, now driftguard compares and the wrapper refuses to call a
+  // drifted session a success.
+  const verdict = opts.verify === false ? null : await finishLineVerdict(root);
+  process.exit(verdict === 'drift' && agentExit === 0 ? 1 : agentExit);
+}
+
+/**
+ * Run `driftguard compare` (its own TTY render, counsel included) and fold the
+ * outcome: 'clean' | 'drift' | null (not configured / tooling error — a guard
+ * bug must never fail the user's session: same fail-open doctrine as hooks).
+ */
+async function finishLineVerdict(root: string): Promise<'clean' | 'drift' | null> {
+  const bin = await driftguardInvocation(root);
+  if (!bin) return null;
+  const res = await execa(bin[0], [...bin[1], 'compare'], {
+    cwd: root,
+    stdio: 'inherit',
+    reject: false,
+    timeout: 120_000,
+  });
+  if (res.exitCode === 0) {
+    process.stdout.write(`${pc.green('✓ finish line: no drift')} — the session kept its contract.\n`);
+    return 'clean';
+  }
+  if (res.exitCode === 1) {
+    process.stderr.write(
+      `${pc.red('✗ finish line: drift detected')} — change requests await YOUR decision: ` +
+        `\`driftguard review\` or \`driftguard ui\`. (Wrapper exits non-zero so scripts can't mistake this for a clean run.)\n`,
+    );
+    return 'drift';
+  }
+  process.stdout.write(pc.dim('finish line: driftguard could not verify (tooling) — not blocking.\n'));
+  return null;
+}
+
+/** How to invoke driftguard here: bundled bin via env, or the PATH binary. */
+async function driftguardInvocation(root: string): Promise<[string, string[]] | null> {
+  if (!existsSync(path.join(root, '.driftguard', 'config.json'))) return null;
+  const envBin = process.env['DRIFTGUARD_BIN'];
+  if (envBin) return ['node', [envBin]];
+  return (await hasBinary('driftguard')) ? ['driftguard', []] : null;
 }
 
 /**
@@ -81,7 +126,7 @@ function exitCodeFor(child: { exitCode?: number; signal?: string }, bin: string)
 
 /** Best-effort fresh baseline so driftguard measures drift from "now". */
 async function refreshDriftguardBaseline(root: string): Promise<void> {
-  if (!existsSync(path.join(root, '.driftguard', 'config.json'))) return;
-  if (!(await hasBinary('driftguard'))) return;
-  await execa('driftguard', ['snapshot', 'baseline'], { cwd: root, reject: false, timeout: 120_000 });
+  const bin = await driftguardInvocation(root);
+  if (!bin) return;
+  await execa(bin[0], [...bin[1], 'snapshot', 'baseline'], { cwd: root, reject: false, timeout: 120_000 });
 }
