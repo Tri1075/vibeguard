@@ -8,6 +8,23 @@ All notable changes to vibeguard are documented here. The format follows
 
 ### Added
 
+- **Simplicity: the package is `vibeguard`, three gestures, one name.** The
+  npm name was verified free and taken; the GitHub repo renamed to match (old
+  URLs redirect). Bare `npx vibeguard` governs the project (one onboarding
+  question on a fresh repo, idempotent bootstrap otherwise); `vibeguard
+review` / `vibeguard ui` front-door driftguard's human-only surfaces so the
+  user never learns a second binary name; probe commands and docs all use the
+  short name.
+
+- **Deploy everywhere: eight named hosts.** A data-driven host registry
+  (Claude Code, Cursor, Codex CLI, OpenCode, Hermes, Gemini CLI, Antigravity,
+  Kiro — anything else via the AGENTS.md standard): the law lands in each
+  host's native rules file (`vibeguard emit <host…|--all>` for IDEs), and
+  `vibeguard run <cli>` now runs the **driftguard verdict when the agent
+  exits** — a drifted session can't exit 0, tooling errors stay fail-open,
+  `--no-verify` opts out. The README support matrix states honestly where
+  enforcement is in-session (Claude Code plugin) vs finish-line.
+
 - **Detection benchmark (docs/benchmarks.md).** 11 realistic seeded faults,
   11/11 caught (9 blocking, 2 advisory-by-design), zero false positives on the
   clean tree; reproducible via `node scripts/bench-detection.mjs` against the

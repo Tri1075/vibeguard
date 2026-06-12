@@ -90,9 +90,16 @@ HANDOFF.md                    # written at 120K, re-injected next session
 
 ## 7. Roadmap
 
-- **M1 — Core (this milestone)**: `init` (interactive level onboarding + profiles) + `rules.json`/instructions + the 5 non-AST gates (modules, debt, secrets, secure-code, deps) + `check [--json]` + debt/deps human commands + driftguard registration (probe + protected path) + laws for all 7 rules + Claude Code skill emission + fixtures/tests + English docs.
-- **M2 — Wrapper & hosts**: `run <cli>` (host detection, artifacts, headroom chaining, green-gates-at-start) + Cursor/AGENTS.md adapters + handoff implementation (transcript counter on Claude Code, `HANDOFF.md` lifecycle).
-- **M3 — gates completed**: no-dead-code + error-handling (heuristic, FP-safe) + GitHub Action + dogfooding driftguard splits. Function-length was deliberately deferred: counting braces across template literals without a real parser produces false positives, which violates the precision principle — it lands with the TypeScript-AST milestone.
+The milestones framed here (core gates, wrapper & hosts, completed gate set)
+all shipped, and the project kept going well past them: nine rules with two
+postures, the zero-friction Claude Code plugin (bundled binaries, lifecycle
+hooks), eight named hosts (law in each host's native rules file, finish-line
+verdict in the wrapper), measured benchmarks (detection 11/11 with zero false
+positives; ×2.4 check speedup), and the Karpathy-aligned law. The live record
+is [CHANGELOG.md](CHANGELOG.md); the live roadmap line is in
+[README.md](README.md). Function-length stays deferred until the
+TypeScript-AST milestone — counting braces across template literals without a
+real parser produces false positives, which violates the precision principle.
 
 ## 8. Risks
 
