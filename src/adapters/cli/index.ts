@@ -3,6 +3,8 @@ import { Command } from 'commander';
 import { TOOL_VERSION } from '../../version.js';
 import { initCommand } from './init.js';
 import { emitCommand } from './emit.js';
+import { governCommand } from './govern.js';
+import { driftguardProxy } from './review-proxy.js';
 import { runCommand } from './run.js';
 import { bootstrapCommand } from './bootstrap.js';
 import { handoffCommand, tokensCommand } from './session.js';
@@ -124,6 +126,25 @@ export async function runCli(argv: string[]): Promise<void> {
     .action((opts: { skill?: boolean }) => {
       rulesCommand(opts);
     });
+
+  program
+    .command('review')
+    .description('arbitrate pending change requests (front door to driftguard review — human-only)')
+    .action(async () => {
+      await driftguardProxy(cwd(), ['review']);
+    });
+
+  program
+    .command('ui')
+    .description('open the local review dashboard (front door to driftguard ui — human-only)')
+    .action(async () => {
+      await driftguardProxy(cwd(), ['ui']);
+    });
+
+  // Bare `npx vibeguard`: govern this project — the simplest possible gesture.
+  program.action(async () => {
+    await governCommand(cwd());
+  });
 
   await program.parseAsync(argv);
 }

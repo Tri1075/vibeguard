@@ -1,28 +1,28 @@
-# vibeguard-pack — Product framing
+# vibeguard — Product framing
 
 > The essential foundation for vibecoders: the principles of the best engineers, followed by any LLM, enforced by gates — not by vibes.
 > Status: framing frozen 2026-06-10. Private repository first; public release once battle-tested.
 
 ## 1. Vision
 
-LLMs code fast and drift fast: bloated modules, silent technical debt, parachuted dependencies, hardcoded secrets, insecure patterns, saturated context windows that make the model dumb. vibeguard-pack is **the pack a user launches at the start of every coding session, whatever the LLM or CLI** (Claude Code, Cursor, aider, local models…). It serves beginners (safe defaults, zero config, guided explanations) and experienced engineers alike (everything is customizable — by the human owner, never by the agent).
+LLMs code fast and drift fast: bloated modules, silent technical debt, parachuted dependencies, hardcoded secrets, insecure patterns, saturated context windows that make the model dumb. vibeguard is **the pack a user launches at the start of every coding session, whatever the LLM or CLI** (Claude Code, Cursor, aider, local models…). It serves beginners (safe defaults, zero config, guided explanations) and experienced engineers alike (everything is customizable — by the human owner, never by the agent).
 
 **Founding principle — every rule ships as law + police.** A skill alone (text the LLM is _supposed_ to follow) is weak. Each principle is delivered as a pair: an imperative rule text (the law) + a deterministic **gate** with exit 0/1 (the police). Lesson learned from driftguard: prompt-side prevention is never enough; empirical detection is mandatory.
 
 ## 2. Frozen decisions
 
-| Decision         | Choice                                                                                                                                                                                                                        |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Name             | **vibeguard-pack** (binary: `vibeguard`)                                                                                                                                                                                      |
-| Session start    | **wrapper `vibeguard run <cli>`** — prepares everything, then launches the agent                                                                                                                                              |
-| Rule set         | **the 9 rules** (see §4) — 7 in the MVP, plan-first & robust-stack added in M4                                                                                                                                                |
-| 200-line measure | **code lines only** (non-blank, non-comment — ESLint `max-lines` convention), owner-configurable                                                                                                                              |
-| Context limit    | **handoff mandatory at 120K tokens**, warning at 100K — owner-configurable                                                                                                                                                    |
-| Publication      | GitHub private → public when proven; npm; **MIT** (switched from Apache-2.0 in M5); Claude Code plugin marketplace (`/plugin marketplace add Tri1075/vibeguard-pack`, static `skills/` kept in sync with the TS source by CI) |
-| Customization    | per-rule editable markdown instructions + `rules.json`; experience-level onboarding; user-level defaults                                                                                                                      |
-| Owner boundary   | `.vibeguard/**` is a driftguard-protected path — "never raise the limit yourself: owner decision" is guaranteed by construction                                                                                               |
-| Language         | the entire repository (code, comments, docs, rule texts) is **English**                                                                                                                                                       |
-| Privacy          | no personal names, emails, or absolute local paths anywhere in the repo or its git history (public-bound)                                                                                                                     |
+| Decision         | Choice                                                                                                                                                                                                                   |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Name             | **vibeguard** (binary: `vibeguard`)                                                                                                                                                                                      |
+| Session start    | **wrapper `vibeguard run <cli>`** — prepares everything, then launches the agent                                                                                                                                         |
+| Rule set         | **the 9 rules** (see §4) — 7 in the MVP, plan-first & robust-stack added in M4                                                                                                                                           |
+| 200-line measure | **code lines only** (non-blank, non-comment — ESLint `max-lines` convention), owner-configurable                                                                                                                         |
+| Context limit    | **handoff mandatory at 120K tokens**, warning at 100K — owner-configurable                                                                                                                                               |
+| Publication      | GitHub private → public when proven; npm; **MIT** (switched from Apache-2.0 in M5); Claude Code plugin marketplace (`/plugin marketplace add Tri1075/vibeguard`, static `skills/` kept in sync with the TS source by CI) |
+| Customization    | per-rule editable markdown instructions + `rules.json`; experience-level onboarding; user-level defaults                                                                                                                 |
+| Owner boundary   | `.vibeguard/**` is a driftguard-protected path — "never raise the limit yourself: owner decision" is guaranteed by construction                                                                                          |
+| Language         | the entire repository (code, comments, docs, rule texts) is **English**                                                                                                                                                  |
+| Privacy          | no personal names, emails, or absolute local paths anywhere in the repo or its git history (public-bound)                                                                                                                |
 
 ## 3. The three transversal pillars
 
@@ -100,7 +100,7 @@ HANDOFF.md                    # written at 120K, re-injected next session
 2. **Token counting imprecise outside Claude Code**: announced as best-effort; handoff remains a discipline taught by the law even without an exact counter.
 3. **Wrapper fragility across CLIs**: `run` = prepare + plain exec (no I/O interception); interception complexity stays in headroom, whose job it is.
 4. **AST scope across languages**: TypeScript first, others via adapters — no universality promise in v1.
-5. **Overlap with linters**: clear positioning — vibeguard-pack does not replace ESLint; it governs _the agent's behavior_ (law + driftguard enforcement + human arbitration); linters remain tools that gates may invoke.
+5. **Overlap with linters**: clear positioning — vibeguard does not replace ESLint; it governs _the agent's behavior_ (law + driftguard enforcement + human arbitration); linters remain tools that gates may invoke.
 
 ## 9. Stack
 

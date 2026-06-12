@@ -9,11 +9,11 @@ Instead, report privately through GitHub:
 1. Go to the repository's **Security** tab.
 2. Click **Report a vulnerability** to open a private security advisory.
 
-We will acknowledge your report, investigate, and coordinate a fix and disclosure with you. Thank you for helping keep vibeguard-pack and its users safe.
+We will acknowledge your report, investigate, and coordinate a fix and disclosure with you. Thank you for helping keep vibeguard and its users safe.
 
 ## Scope
 
-vibeguard-pack reads project files and runs `git` to discover them. It does not transmit your code anywhere. The optional integrations it can launch (your agent CLI, `headroom`, `driftguard`) are separate tools with their own security policies.
+vibeguard reads project files and runs `git` to discover them. It does not transmit your code anywhere. The optional integrations it can launch (your agent CLI, `headroom`, `driftguard`) are separate tools with their own security policies.
 
 ## Supported versions
 

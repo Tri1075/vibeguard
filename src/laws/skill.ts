@@ -7,7 +7,7 @@
 import { LAWS } from './texts.js';
 
 const PREAMBLE = [
-  'Engineering rules for this project (vibeguard-pack). Apply them to every change. driftguard verifies',
+  'Engineering rules for this project (vibeguard). Apply them to every change. driftguard verifies',
   'and blocks drift; the session discipline below avoids the degraded end-of-context zone.',
   '',
   '## Working with the user (scale to the task)',

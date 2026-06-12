@@ -4,7 +4,7 @@
 
 ### AI writes your code now. vibeguard makes sure it's good code.
 
-[![CI](https://github.com/Tri1075/vibeguard-pack/actions/workflows/ci.yml/badge.svg)](https://github.com/Tri1075/vibeguard-pack/actions/workflows/ci.yml)
+[![CI](https://github.com/Tri1075/vibeguard/actions/workflows/ci.yml/badge.svg)](https://github.com/Tri1075/vibeguard/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%E2%89%A520-brightgreen.svg)](package.json)
 [![dogfooded](https://img.shields.io/badge/dogfooded-100%25-success.svg)](#we-eat-our-own-cooking)
@@ -70,7 +70,7 @@ One command on Claude Code, or one npm dependency for any other agent. Then it's
 ```sh
 # Claude Code (plugin — the WHOLE loop, zero-config: rules, gates, live
 # enforcement and the workflow skills, all self-contained — no npm, no build):
-/plugin marketplace add Tri1075/vibeguard-pack
+/plugin marketplace add Tri1075/vibeguard
 /plugin install vibeguard@vibeguard
 # Each session now auto-governs itself: it scopes the project at startup and
 # blocks the agent at the end of any turn that broke a green check.
@@ -79,14 +79,14 @@ One command on Claude Code, or one npm dependency for any other agent. Then it's
 # session never launders an unresolved regression.
 
 # Any other agent (Cursor, Codex CLI, OpenCode, Hermes, Gemini CLI,
-# Antigravity, Kiro, aider, local models…):
-npm i -D vibeguard-pack
-npx vibeguard init            # one question: beginner or experienced?
-npx vibeguard run codex       # CLI agents: governed session + exit verdict
-npx vibeguard emit cursor     # IDE agents: write their native rules file
+# Antigravity, Kiro, aider, local models…) — three gestures, one name:
+npx vibeguard                 # govern this project (one question, then done)
+npx vibeguard run codex       # daily: governed session + exit verdict
+npx vibeguard review          # arbitrate what the guard caught (or: ui)
+# IDE agents (Cursor, Antigravity, Kiro): npx vibeguard emit cursor
 ```
 
-Never written code before? Run the three commands above, answer **beginner**, and `vibeguard check` will always tell you in plain English whether your code is healthy — and how to fix it when it isn't.
+Never written code before? Type `npx vibeguard`, answer **beginner**, and `vibeguard check` will always tell you in plain English whether your code is healthy — and how to fix it when it isn't.
 
 ## Deploy everywhere
 
@@ -162,7 +162,7 @@ Several are inspired by [Matt Pocock's skills](https://github.com/mattpocock/ski
 
 ```yaml
 # GitHub Action
-- uses: Tri1075/vibeguard-pack@main
+- uses: Tri1075/vibeguard@main
   with: { command: check --ci }
 ```
 

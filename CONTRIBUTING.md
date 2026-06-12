@@ -1,4 +1,4 @@
-# Contributing to vibeguard-pack
+# Contributing to vibeguard
 
 Thank you for helping make AI-written code cleaner for everyone. This project thrives on contributions — new rules, new language support, sharper gates, better docs.
 

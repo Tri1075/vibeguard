@@ -65,7 +65,7 @@ describe('vibeguard bootstrap', () => {
     };
     const ours = config.probes.filter((p) => p.name.startsWith('vibeguard-'));
     expect(ours.length).toBeGreaterThan(0);
-    for (const probe of ours) expect(probe.cmd).toMatch(/^npx -y vibeguard-pack check /);
+    for (const probe of ours) expect(probe.cmd).toMatch(/^npx -y vibeguard check /);
 
     // config.local.json (gitignored overlay) carries this machine's binary,
     // quoted — plugin roots can contain spaces.

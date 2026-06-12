@@ -56,7 +56,7 @@ pass "bootstrap wrote rules + driftguard config + baseline"
 
 # Committed config stays portable; this machine's bundled binary lives in the
 # gitignored overlay — an absolute path must never land in config.json.
-grep -q "npx -y vibeguard-pack check" .driftguard/config.json || fail "config.json: probes are not portable"
+grep -q "npx -y vibeguard check" .driftguard/config.json || fail "config.json: probes are not portable"
 grep -qF "$VG" .driftguard/config.json && fail "config.json leaks the local binary path"
 [ -f .driftguard/config.local.json ] || fail "no config.local.json overlay"
 grep -qF "$VG" .driftguard/config.local.json || fail "overlay does not carry the bundled binary"

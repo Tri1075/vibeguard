@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to vibeguard-pack are documented here. The format follows
+All notable changes to vibeguard are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
@@ -96,7 +96,7 @@ check`), the declared scope, and the plan, fixes its own mistakes, records the
   code — 127 when the agent CLI can't be launched, `128+signal` on a signal
   death, instead of a misleading 0 (its e2e now uses a real stub on PATH, no
   longer passing only because the CLI was absent). **Driftguard probes** call
-  `npx -y vibeguard-pack` (the published package) instead of the bare
+  `npx -y vibeguard` (the published package) instead of the bare
   `vibeguard` name. **Gate precision:** secure-code stopped firing on the
   French word "des" (`\bDES\b` no longer `/i`), on method calls like
   `model.eval()`, and on `delete cache['a'+k]`; it now skips comment lines.
@@ -116,7 +116,7 @@ check`), the declared scope, and the plan, fixes its own mistakes, records the
 
 - **M5 — distribution & self-governance.** License switched to **MIT**.
   **Claude Code plugin marketplace**: the repo is now a plugin + marketplace
-  (`/plugin marketplace add Tri1075/vibeguard-pack`); static `skills/` are
+  (`/plugin marketplace add Tri1075/vibeguard`); static `skills/` are
   generated from the TypeScript source (`npm run emit:plugin`) and CI fails on
   any drift between the two. **"No excuses" block** in the emitted law: the
   agent's favorite rationalizations, pre-refuted (token budget 1100 → 1300,
@@ -166,4 +166,4 @@ handoff` writes `HANDOFF.md`; `vibeguard tokens` names the context zone
   onboarding, `check`, `debt`, `deps`, `rules`. driftguard integration: gates
   register as probes and `.vibeguard/**` is protected.
 
-[Unreleased]: https://github.com/Tri1075/vibeguard-pack
+[Unreleased]: https://github.com/Tri1075/vibeguard

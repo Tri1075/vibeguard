@@ -1,5 +1,5 @@
 /**
- * Shared contracts for vibeguard-pack.
+ * Shared contracts for vibeguard.
  *
  * A "finding" is one rule violation: what was found, where, how serious, and how
  * to fix it. A "gate" turns a project tree into findings. Severity mirrors

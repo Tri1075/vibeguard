@@ -4,7 +4,7 @@
  * adds hard, in-session enforcement when it is present in the project.
  *
  * Probe commands are split by audience: the committed config.json always gets
- * the PORTABLE form (`npx -y vibeguard-pack check …` — works for teammates and
+ * the PORTABLE form (`npx -y vibeguard check …` — works for teammates and
  * CI), while a machine-local command (the plugin's bundled binary at an
  * absolute path) goes into config.local.json, driftguard's gitignored overlay
  * that replaces probes by name. Absolute home-dir paths never reach a
@@ -16,7 +16,7 @@ import { GATES } from '../../gates/registry.js';
 import { PROTECTED_PATTERN } from '../../core/paths.js';
 import { readJson, writeJsonAtomic } from '../../core/store.js';
 
-const PORTABLE_CHECK_CMD = 'npx -y vibeguard-pack check';
+const PORTABLE_CHECK_CMD = 'npx -y vibeguard check';
 
 interface Probe {
   name: string;

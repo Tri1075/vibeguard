@@ -1,5 +1,5 @@
 {
-  "name": "vibeguard-pack",
+  "name": "vibeguard",
   "version": "0.1.0",
   "description": "The essential foundation for vibecoders: 9 engineering rules every LLM must follow (law) and deterministic gates that enforce them (police). Pairs with driftguard and headroom.",
   "license": "MIT",
@@ -72,10 +72,10 @@
   "author": "Tri1075",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Tri1075/vibeguard-pack.git"
+    "url": "git+https://github.com/Tri1075/vibeguard.git"
   },
   "bugs": {
-    "url": "https://github.com/Tri1075/vibeguard-pack/issues"
+    "url": "https://github.com/Tri1075/vibeguard/issues"
   },
-  "homepage": "https://github.com/Tri1075/vibeguard-pack#readme"
+  "homepage": "https://github.com/Tri1075/vibeguard#readme"
 }

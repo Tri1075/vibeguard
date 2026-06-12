@@ -7,7 +7,7 @@
 # hostname. Run it in a terminal (or render it with demo/demo.tape via vhs).
 #
 # Requires `vibeguard` and `driftguard` on PATH (install the plugin, or
-# `npm i -g vibeguard-pack drift-guard`).
+# `npm i -g vibeguard drift-guard`).
 set -euo pipefail
 
 # --- neutral, PII-free environment -------------------------------------------
