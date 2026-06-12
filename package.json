@@ -1,5 +1,5 @@
 {
-  "name": "vibeguard",
+  "name": "vibeguard-pack",
   "version": "0.1.0",
   "description": "The essential foundation for vibecoders: 9 engineering rules every LLM must follow (law) and deterministic gates that enforce them (police). Pairs with driftguard and headroom.",
   "license": "MIT",

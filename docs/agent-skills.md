@@ -20,7 +20,7 @@ edits are change requests, and recurring patterns become CLAUDE.md rules (`drift
 
 # Our enforcement (the police):
 /plugin marketplace add Tri1075/vibeguard
-npm i -D vibeguard && npx vibeguard init
+npm i -D vibeguard-pack && npx vibeguard-pack init
 ```
 
 They compose cleanly: use `/spec`, `/plan`, `/build` from agent-skills all day — every change still has

@@ -141,7 +141,7 @@ export async function runCli(argv: string[]): Promise<void> {
       await driftguardProxy(cwd(), ['ui']);
     });
 
-  // Bare `npx vibeguard`: govern this project — the simplest possible gesture.
+  // Bare `npx vibeguard-pack`: govern this project — the simplest possible gesture.
   program.action(async () => {
     await governCommand(cwd());
   });

@@ -100,7 +100,7 @@ test file, never a side effect of editing prose.
 | In-session | the Claude Code plugin: gates registered as driftguard probes, Stop hook blocks green→red until self-corrected         | the full loop, zero-config          |
 
 `adapters/cli/driftguard-link.ts` writes the bridge: portable probe commands
-(`npx -y vibeguard check <rule> --ci`) into the committed
+(`npx -y vibeguard-pack check <rule> --ci`) into the committed
 `.driftguard/config.json`, machine-local bundled-binary commands into the
 gitignored `config.local.json` overlay, and `.vibeguard/**` into driftguard's
 protected paths. Probes are re-registered on every bootstrap (self-healing

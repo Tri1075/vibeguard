@@ -67,9 +67,9 @@ describe('vibeguard review / ui — one front door', () => {
     expect(res.exitCode).toBe(3); // driftguard's code, passed through faithfully
   });
 
-  it('without driftguard on the project, points to `npx vibeguard` and exits 2', async () => {
+  it('without driftguard on the project, points to `npx vibeguard-pack` and exits 2', async () => {
     const res = await vg(['ui']);
     expect(res.exitCode).toBe(2);
-    expect(String(res.stderr)).toContain('npx vibeguard');
+    expect(String(res.stderr)).toContain('npx vibeguard-pack');
   });
 });

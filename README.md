@@ -82,13 +82,13 @@ One command on Claude Code, or one npm dependency for any other agent. Then it's
 
 # Any other agent (Cursor, Codex CLI, OpenCode, Hermes, Gemini CLI,
 # Antigravity, Kiro, aider, local models…) — three gestures, one name:
-npx vibeguard                 # govern this project (one question, then done)
-npx vibeguard run codex       # daily: governed session + exit verdict
-npx vibeguard review          # arbitrate what the guard caught (or: ui)
-# IDE agents (Cursor, Antigravity, Kiro): npx vibeguard emit cursor
+npx vibeguard-pack                 # govern this project (one question, then done)
+npx vibeguard-pack run codex       # daily: governed session + exit verdict
+npx vibeguard-pack review          # arbitrate what the guard caught (or: ui)
+# IDE agents (Cursor, Antigravity, Kiro): npx vibeguard-pack emit cursor
 ```
 
-Never written code before? Type `npx vibeguard`, answer **beginner**, and `vibeguard check` will always tell you in plain English whether your code is healthy — and how to fix it when it isn't.
+Never written code before? Type `npx vibeguard-pack`, answer **beginner**, and `vibeguard check` will always tell you in plain English whether your code is healthy — and how to fix it when it isn't.
 
 > **Platforms**: developed and CI-tested on macOS and Linux (Node ≥ 20). Windows is untested — reports and fixes are very welcome.
 
@@ -96,11 +96,11 @@ Never written code before? Type `npx vibeguard`, answer **beginner**, and `vibeg
 
 The full loop is the point — but every half works on its own, with commands that already exist:
 
-| Recipe                  | What you get                                                                            | How                                                                                                                                       |
-| ----------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| **Full loop** (default) | The law taught to the agent, the gates enforcing it, drift blocked, you arbitrate       | `npx vibeguard`, then `vibeguard run <cli>` (or the Claude Code plugin)                                                                   |
-| **Law only**            | The rules land in your host's native file — nothing checks, nothing blocks              | `vibeguard emit <host>` and stop there; or set any rule to `"warn"` in `rules.json` to keep its findings advisory                         |
-| **Police only**         | Anti-drift enforcement (scope, regressions, protected paths) without the clean-code law | [driftguard](https://github.com/Tri1075/driftguard) standalone: `npx drift-guard init` — and/or keep `vibeguard check` as a plain CI gate |
+| Recipe                  | What you get                                                                            | How                                                                                                                                                |
+| ----------------------- | --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Full loop** (default) | The law taught to the agent, the gates enforcing it, drift blocked, you arbitrate       | `npx vibeguard-pack`, then `vibeguard run <cli>` (or the Claude Code plugin)                                                                       |
+| **Law only**            | The rules land in your host's native file — nothing checks, nothing blocks              | `vibeguard emit <host>` and stop there; or set any rule to `"warn"` in `rules.json` to keep its findings advisory                                  |
+| **Police only**         | Anti-drift enforcement (scope, regressions, protected paths) without the clean-code law | [driftguard](https://github.com/Tri1075/driftguard) standalone: `npx @tri1075/drift-guard init` — and/or keep `vibeguard check` as a plain CI gate |
 
 ## Deploy everywhere
 

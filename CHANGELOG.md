@@ -10,13 +10,15 @@ First public release.
 
 ### Added
 
-- **Simplicity: the package is `vibeguard`, three gestures, one name.** The
-  npm name was verified free and taken; the GitHub repo renamed to match (old
-  URLs redirect). Bare `npx vibeguard` governs the project (one onboarding
-  question on a fresh repo, idempotent bootstrap otherwise); `vibeguard
-review` / `vibeguard ui` front-door driftguard's human-only surfaces so the
-  user never learns a second binary name; probe commands and docs all use the
-  short name.
+- **Simplicity: three gestures, one name.** The GitHub repo is
+  `Tri1075/vibeguard`, the installed command is `vibeguard`, and the npm
+  package is `vibeguard-pack` (npm's typosquat rule reserves the bare name —
+  too similar to a third-party `vibe-guard`; the engine ships as
+  `@tri1075/drift-guard` for the same reason, command `driftguard`). Bare
+  `npx vibeguard-pack` governs the project (one onboarding question on a
+  fresh repo, idempotent bootstrap otherwise); `vibeguard review` /
+  `vibeguard ui` front-door driftguard's human-only surfaces so the user
+  never learns a second binary name.
 
 - **Deploy everywhere: eight named hosts.** A data-driven host registry
   (Claude Code, Cursor, Codex CLI, OpenCode, Hermes, Gemini CLI, Antigravity,
