@@ -9,6 +9,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import pc from 'picocolors';
 import { execa } from 'execa';
+import { isInsideGitRepo } from '../../core/git.js';
 import { pathsFor } from '../../core/paths.js';
 import { hasBinary } from '../../core/proc.js';
 import { initCommand } from './init.js';
@@ -25,6 +26,22 @@ export interface BootstrapOptions {
 
 export async function bootstrapCommand(cwd: string, opts: BootstrapOptions): Promise<void> {
   const root = cwd;
+
+  // The plugin fires this in EVERY session, including ones opened in $HOME or
+  // a downloads folder. Only a git repo is a project we may write into — and a
+  // baseline scan of a non-repo folder can be huge. Outside one, do nothing;
+  // `vibeguard init` remains the explicit way to govern a non-git folder.
+  if (!isInsideGitRepo(root)) {
+    if (!opts.quiet) {
+      process.stdout.write(
+        pc.dim(
+          'vibeguard: not a git repository — skipped (run `vibeguard init` to govern this folder anyway).\n',
+        ),
+      );
+    }
+    return;
+  }
+
   const paths = pathsFor(root);
   const driftguardBin = opts.driftguardBin ?? process.env['DRIFTGUARD_BIN'] ?? null;
   const driftAvailable = driftguardBin !== null || (await hasBinary('driftguard'));
@@ -46,7 +63,8 @@ export async function bootstrapCommand(cwd: string, opts: BootstrapOptions): Pro
   if (driftAvailable) {
     if (!hadDrift) await dg(['init', '--no-verify']);
     const vibeBin = opts.vibeguardBin ?? process.env['VIBEGUARD_BIN'];
-    await registerWithDriftguard(root, vibeBin ? `node ${vibeBin} check` : undefined);
+    // Quoted: plugin roots can contain spaces (e.g. under "Application Support").
+    await registerWithDriftguard(root, vibeBin ? `node "${vibeBin}" check` : undefined);
     await dg(['snapshot', 'baseline']); // refresh so drift is measured from now
   }
 

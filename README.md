@@ -57,6 +57,9 @@ One command on Claude Code, or one npm dependency for any other agent. Then it's
 /plugin install vibeguard@vibeguard
 # Each session now auto-governs itself: it scopes the project at startup and
 # blocks the agent at the end of any turn that broke a green check.
+# Git repos only (a non-repo folder is left untouched); committed config stays
+# portable — machine paths live in a gitignored overlay. Restarting the
+# session never launders an unresolved regression.
 
 # Any other agent (Cursor, Codex, Gemini, aider, local models…):
 npm i -D vibeguard-pack
